@@ -18,22 +18,22 @@ public class Act_Transferencia extends Actividad{
 		
 		StringBuilder st= new StringBuilder();
 		
-		st.append("* ===============\n");
-		st.append("- Transferencia: \n");
-		st.append("* ===============\n");
-		st.append("* Origen: [");
+		st.append("===============\n");
+		st.append(" Transferencia: \n");
+		st.append("===============\n");
+		st.append("Origen: [");
 		st.append(this.dniOrigen);
 		st.append("] ([");
 		st.append(this.cvuOrigen);
 		st.append("])\n");
 		
-		st.append("* Destino: [");
+		st.append("Destino: [");
 		st.append(this.dniDestino);
 		st.append("] ([");
 		st.append(this.cvuDestino);
 		st.append("])\n");
 		
-		st.append("* Monto: [");
+		st.append("Monto: [");
 		st.append(this.monto);
 		st.append("]\n");
 		
@@ -41,7 +41,7 @@ public class Act_Transferencia extends Actividad{
 		st.append(this.estado);
 		st.append("]\n");
 		
-		st.append("* ===============\n");
+		st.append("===============\n");
 		
 		return st.toString();
 

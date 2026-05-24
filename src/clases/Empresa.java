@@ -45,7 +45,6 @@ public class Empresa {
 	}
 	
 	public boolean consultarAutorizado(String dniUsuario) {
-		//verifica si el dni del usuario esta autorizado
 		
 		if(dniUsuario == null || dniUsuario.isBlank()) {
 			

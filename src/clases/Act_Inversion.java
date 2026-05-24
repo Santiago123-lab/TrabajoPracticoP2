@@ -39,7 +39,7 @@ public class Act_Inversion extends Actividad {
 		
 		st.append("Desc: [");
 		st.append(this.tipoInversion);
-		st.append("])\n");
+		st.append("]\n");
 		
 		st.append("Monto: [");
 		st.append(this.monto);

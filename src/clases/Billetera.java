@@ -1,5 +1,6 @@
 package clases;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,11 +8,13 @@ public class Billetera implements IBilletera {
 	
 	private HashMap<String, Usuario> usuarios;
 	private HashMap<String, Empresa> empresas;
+	private HashMap<String, String> aliasCvu;
 	
 	public Billetera() {
 		
         this.usuarios = new HashMap<>();
         this.empresas = new HashMap<>();
+        this.aliasCvu= new HashMap<>();
 		
 	}
 	
@@ -107,26 +110,142 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String crearCuentaRegular(String dniUsuario, String alias) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(this.aliasCvu.containsKey(alias)) {
+			
+			throw new IllegalArgumentException ("El alias ya esta registrado");
+		}
+		
+		if(dniUsuario==null || dniUsuario.isBlank()) {
+			
+			throw new IllegalArgumentException ("El DNI ingresado no es valido");
+		}
+		
+		if(!this.usuarios.containsKey(dniUsuario)) {
+			
+			throw new IllegalArgumentException ("No existe usuario registrado con DNI: "+dniUsuario);
+		}
+		
+		if(alias==null || alias.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese otro alias.");
+		}
+		
+		Usuario u = this.usuarios.get(dniUsuario);
+		Cuenta c = new CuentaRegular (alias, 0.0);
+		u.agregarCuenta(c.consultarAlias(), c); //Asocio la cuenta con el usuario
+		this.aliasCvu.put(alias, c.consultarCVU());
+		
+		return c.consultarCVU();
 	}
 
 	@Override
 	public String crearCuentaPremium(String dniUsuario, String alias, double depositoInicial) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(alias==null || alias.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese otro alias.");
+		}
+
+		if(this.aliasCvu.containsKey(alias)) {
+			
+			throw new IllegalArgumentException ("El alias ya esta registrado");
+		}
+		
+		if(dniUsuario==null || dniUsuario.isBlank()) {
+			
+			throw new IllegalArgumentException ("El DNI ingresado no es valido");
+		}
+		
+		if(!this.usuarios.containsKey(dniUsuario)) {
+			
+			throw new IllegalArgumentException ("No existe usuario registrado con DNI: "+dniUsuario);
+		}
+		
+		
+		if(depositoInicial<500000) {
+			
+			throw new IllegalArgumentException ("Para abrir una cuenta PREMIUM, el deposito inicial debe ser mayor a $500.000");
+			
+		}
+		
+		Cuenta c = new CuentaPremium (alias, depositoInicial);
+		Usuario u = this.usuarios.get(dniUsuario);
+		u.agregarCuenta(c.consultarCVU(), c);
+		this.aliasCvu.put(alias, c.consultarCVU());
+		
+		
+		return c.consultarCVU();
 	}
 
 	@Override
 	public String crearCuentaCorporativa(String dniUsuario, String alias, String cuitEmpresa) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(alias==null || alias.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese otro alias.");
+		}
+		
+		if(this.aliasCvu.containsKey(alias)) {
+			
+			throw new IllegalArgumentException ("El alias ya esta registrado");
+		}
+		
+		
+		if(dniUsuario==null || dniUsuario.isBlank()) {
+			
+			throw new IllegalArgumentException ("El DNI ingresado no es valido");
+		}
+		
+		if(!this.usuarios.containsKey(dniUsuario)) {
+			
+			throw new IllegalArgumentException ("No existe usuario registrado con DNI: "+dniUsuario);
+		}
+		
+		if(cuitEmpresa==null || cuitEmpresa.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese un CUIT correcto.");
+		}
+		
+		if(!this.empresas.containsKey(cuitEmpresa)) {
+			
+			throw new IllegalArgumentException ("La empresa no se encuentra registrada");
+		}
+		
+
+		
+		Empresa e = this.empresas.get(cuitEmpresa);
+		
+		if (e.consultarAutorizado(dniUsuario)) {
+			
+			Usuario u = this.usuarios.get(dniUsuario);
+			Cuenta c = new CuentaCorporativa(alias, 0.0, cuitEmpresa);
+			u.agregarCuenta(c.consultarCVU(), c);
+			this.aliasCvu.put(alias, c.consultarCVU());
+			
+			return c.consultarCVU();
+		}
+
+		
+		throw new IllegalArgumentException ("El usuario no posee el permiso de la empresa.");
 	}
 
 	@Override
 	public List<String> obtenerCuentas(String dniUsuario) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(dniUsuario==null || dniUsuario.isBlank()) {
+			
+			throw new IllegalArgumentException ("El DNI ingresado no es valido");
+		}
+		
+		if(!this.usuarios.containsKey(dniUsuario)) {
+			
+			throw new IllegalArgumentException ("No existe usuario registrado con DNI: "+dniUsuario);
+		}
+		
+		Usuario u = this.usuarios.get(dniUsuario);
+		
+		return u.consultarCuentas();
 	}
 
 	@Override
