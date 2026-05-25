@@ -1,11 +1,15 @@
 package clases;
 
 public class CuentaPremium extends Cuenta {
-	private double depositoInicial;
+	
+
 	
 	public CuentaPremium(String alias, double depositoInicial) {
-		super(alias, depositoInicial);
-		this.depositoInicial = depositoInicial;
+		super(alias);
+		
+
+		this.saldo=depositoInicial;
+		
 	}
 	
 	public boolean puedeDebitar(double monto) {

@@ -14,16 +14,21 @@ public abstract class Cuenta {
 	protected HashMap <Integer, Inversion> inversiones;
   
    
-	public Cuenta(String cvu, String alias, double saldoInicial) {
-		this.cvu = cvu;
+	public Cuenta(String alias) {
+		this.cvu = Utilitarios.generarSiguienteCvu();
 	    this.alias = alias;
-	    this.saldo = saldoInicial;
+	    this.saldo = 0.0;
 	    this.saldoInvertido = 0.0;
 	    this.actividades = new ArrayList<>();
 	    this.inversiones = new HashMap<>(); 	}
 	
        public double consultarSaldo() {
            return saldo;
+       }
+       
+       public String consultarCVU() {
+    	   return this.cvu;
+    	   
        }
       
        public double consultarSaldoInvertido() {
@@ -32,6 +37,11 @@ public abstract class Cuenta {
       
        public String consultarAlias() {
            return alias;
+       }
+       
+       public void agregarActividad (Actividad act) {
+    	   
+    	   this.actividades.add(act);
        }
       
        public List<Actividad> consultarActividades() {
@@ -42,8 +52,7 @@ public abstract class Cuenta {
            this.saldo -= monto;
        }
        
-       public 
-      
+  
        public void acreditar(double monto) {
            this.saldo += monto;
        }

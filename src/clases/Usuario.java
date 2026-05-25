@@ -27,6 +27,11 @@ public class Usuario {
 		this.permisoEmpresarial=false;
 	}
 	
+	public String consultarDni() {
+		
+		return this.dni;
+		
+	}
 	
 	public List <String> consultarCuentas(){
 		
@@ -57,6 +62,19 @@ public class Usuario {
 		}
 		
 		this.cuentas.put(cvu, c);
+		
+	}
+	
+	public Cuenta obtenerCuenta(String cvu) {
+		
+		return this.cuentas.get(cvu);
+		
+	}
+		
+	public boolean existeCuenta (String cvu) {
+		
+		return this.cuentas.containsKey(cvu);
+		
 		
 	}
 	

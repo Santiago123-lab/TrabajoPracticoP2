@@ -2,8 +2,9 @@ package clases;
 
 public class CuentaRegular extends Cuenta {
 	
-	public CuentaRegular(String alias, double saldoInicial) {
-		super(alias, saldoInicial);
+	public CuentaRegular(String alias) {
+		super(alias);
+		
 		
 	}
 	

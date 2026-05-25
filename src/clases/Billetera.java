@@ -134,8 +134,8 @@ public class Billetera implements IBilletera {
 		}
 		
 		Usuario u = this.usuarios.get(dniUsuario);
-		Cuenta c = new CuentaRegular (alias, 0.0);
-		u.agregarCuenta(c.consultarAlias(), c); //Asocio la cuenta con el usuario
+		Cuenta c = new CuentaRegular (alias);
+		u.agregarCuenta(c.consultarCVU(), c); //Asocio la cuenta con el usuario
 		this.aliasCvu.put(alias, c.consultarCVU());
 		
 		return c.consultarCVU();
@@ -221,7 +221,7 @@ public class Billetera implements IBilletera {
 		if (e.consultarAutorizado(dniUsuario)) {
 			
 			Usuario u = this.usuarios.get(dniUsuario);
-			Cuenta c = new CuentaCorporativa(alias, 0.0, cuitEmpresa);
+			Cuenta c = new CuentaCorporativa(alias, cuitEmpresa);
 			u.agregarCuenta(c.consultarCVU(), c);
 			this.aliasCvu.put(alias, c.consultarCVU());
 			
@@ -252,19 +252,132 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public double obtenerSaldoDisponible(String cvu) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		if (cvu==null || cvu.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese un CVU valido");
+		}
+		
+		for(Usuario u: this.usuarios.values()) {
+			
+			if(u.existeCuenta(cvu)) {
+				
+				Cuenta c = u.obtenerCuenta(cvu);
+				
+				return c.consultarSaldo();
+			}
+			
+		}
+		
+		throw new IllegalArgumentException ("No existe una cuenta con el CVU: "+cvu);
+	
 	}
 
 	@Override
 	public void realizarTransferencia(String cvuOrigen, String cvuDestino, double monto) {
-		// TODO Auto-generated method stub
+		
+		if(cvuOrigen==null || cvuOrigen.isBlank()) {
+			throw new IllegalArgumentException ("El CVU de origen no es valido");
+		}
+		
+		if(cvuDestino==null || cvuDestino.isBlank()) {
+			throw new IllegalArgumentException ("El CVU de destino no es valido");
+		}
+		
+		if(monto<0) {
+			throw new IllegalArgumentException("Por favor, ingrese un monto valido.");
+		}
+		
+		Cuenta origen = null;
+		Cuenta destino = null;
+		String dniOrigen = null;
+		String dniDestino = null;	
+		
+		//Busco cuenta de ORIGEN
+		
+		for(Usuario u: this.usuarios.values()) {
+			
+			if(u.existeCuenta(cvuOrigen)) {
+				
+				origen = u.obtenerCuenta(cvuOrigen);
+				dniOrigen = u.consultarDni();
+				
+			}
+		}
+		
+		if (origen==null) {
+			
+			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvuOrigen);
+		}
+		
+		//Busco cuenta DESTINO
+		
+		for(Usuario u: this.usuarios.values()) {
+			
+			if(u.existeCuenta(cvuDestino)) {
+				
+				destino = u.obtenerCuenta(cvuDestino);
+				dniDestino = u.consultarDni();
+				
+			}
+		}
+		
+		if (destino==null) {
+			
+			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvuDestino);
+		}
+		
+		if(!origen.puedeDebitar(monto)) {
+			
+			origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
+			destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
+			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
+		}
+		
+		if(!destino.puedeAcreditar(monto)) {
+			
+			origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
+			destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
+			throw new IllegalArgumentException ("La cuenta destino no puede acreditar el saldo deseado");
+		}
+		
+		origen.debitar(monto);
+		destino.acreditar(monto);
+		origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
+		destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
+		
+		
 		
 	}
 
 	@Override
 	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
-		// TODO Auto-generated method stub
+		
+		if(dni==null||dni.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un DNI valido");
+		}
+		
+		if(!this.usuarios.containsKey(dni)) {
+			
+			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
+		}
+		
+		if(cvu==null||cvu.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
+		}
+		
+		if(monto<0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un monto valido");
+		}
+		
+		if(plazoDias<=0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un plazo valido");
+		}
+		
 		Cuenta c = buscarCuenta(cvu);
 		
 		Inversion inversion = c.crearInversionRentaFija(monto, plazoDias);
@@ -277,6 +390,41 @@ public class Billetera implements IBilletera {
 	@Override
 	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa, double tasa) {
 		
+		if(dni==null||dni.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un DNI valido");
+		}
+		
+		if(!this.usuarios.containsKey(dni)) {
+			
+			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
+		}
+		
+		if(cvu==null||cvu.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
+		}
+		
+		if(monto<0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un monto valido");
+		}
+		
+		if(plazoDias<=0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un plazo valido");
+		}
+		
+		if(tasa<0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese una tasa");
+		}
+		
+		if(divisa==null||divisa.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese una divisa valida");
+		}
+		
 		Cuenta c = buscarCuenta(cvu);
 		
 		Inversion inversion = c.crearInversionDivisa(monto, plazoDias, tasa, divisa);
@@ -288,6 +436,31 @@ public class Billetera implements IBilletera {
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
 		
+		if(dni==null||dni.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un DNI valido");
+		}
+		
+		if(!this.usuarios.containsKey(dni)) {
+			
+			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
+		}
+		
+		if(cvu==null||cvu.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
+		}
+		
+		if(monto<0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un monto valido");
+		}
+		
+		if(plazoDias<=0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un plazo valido");
+		}
+		
 		Cuenta c = buscarCuenta(cvu);
 		
 		if (c instanceof CuentaCorporativa) {
@@ -297,18 +470,6 @@ public class Billetera implements IBilletera {
 		
 		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
 
-	}
-
-	private Cuenta buscarCuenta(String cvu) {
-		
-		for(Usuario usuario : usuarios.values()) {
-			Cuenta cuenta = usuario.buscarCuenta(cvu);
-			if (cuenta!=null) {
-				return cuenta;
-			}
-		}
-		
-		throw new RuntimeException("Cuenta con CVU" + cvu + "no encontrada");
 	}
 
 
@@ -332,8 +493,24 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialCuenta(String cvu) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		if(cvu==null || cvu.isBlank()) {
+			throw new IllegalArgumentException("El CVU no es valido");
+			
+		}
+		
+		Cuenta c = buscarCuenta(cvu);
+		
+		List <String> lista = new ArrayList();
+		
+		for(Actividad act : c.consultarActividades()) {
+			
+			lista.add(act.toString());
+					
+		}
+		
+		
+		return lista;
 	}
 
 	@Override
@@ -352,6 +529,38 @@ public class Billetera implements IBilletera {
 	public List<String> cuentasConMayorVolumen(int cantidadTop) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private Cuenta buscarCuenta(String cvu) {
+		
+		if(cvu==null || cvu.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un cvu valido");
+		}
+		
+		for(Usuario usuario : usuarios.values()) {
+			Cuenta cuenta = usuario.buscarCuenta(cvu);
+			if (cuenta!=null) {
+				return cuenta;
+			}
+		}
+		
+		throw new IllegalArgumentException("Cuenta con CVU" + cvu + "no encontrada");
+	}
+
+	
+	private Actividad crearActividad(String dniOrigen, String dniDestino, String cvuOrigen, String cvuDestino, double monto, String estado) {
+		
+		Actividad act = new Act_Transferencia (dniOrigen, dniDestino, cvuOrigen, cvuDestino, monto, estado);
+		
+		return act;
+	}
+	
+	private Actividad crearActividad(String dniUsuario, String cvu, String tipoInversion, int plazo, double monto, String estado) {
+		
+		Actividad act = new Act_Inversion (dniUsuario,cvu,tipoInversion,plazo, monto, estado);
+		
+		return act;
 	}
 	
 	
