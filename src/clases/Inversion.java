@@ -19,7 +19,10 @@ public abstract class Inversion {
 //    public LocalDate getFechaDeConstitucion(){
 //        return fechaDeConstitucion; 
 //    }
-
+    
+    public int getId() {
+    	return id;
+    }
     public abstract double calcularGanancia(); 
 
     public abstract boolean esPrecancelable(); 

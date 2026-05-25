@@ -1,3 +1,5 @@
+
+
 package clases;
 
 import java.util.ArrayList;
@@ -263,21 +265,45 @@ public class Billetera implements IBilletera {
 	@Override
 	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
 		// TODO Auto-generated method stub
-		return 0;
+		Cuenta c = buscarCuenta(cvu);
+		
+		Inversion inversion = c.crearInversionRentaFija(monto, plazoDias);
+		
+		return inversion.getId();
+			
+
 	}
 
 	@Override
-	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa,
-			double tasa) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int realizarInversionDivisa(String dni, String cvu, double monto, int plazoDias, String divisa, double tasa) {
+		
+		Cuenta c = buscarCuenta(cvu);
+		
+		Inversion inversion = c.crearInversionDivisa(monto, plazoDias, tasa, divisa);
+		
+		return inversion.getId();
+
 	}
 
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		Cuenta c = buscarCuenta(cvu);
+		
+		if (c instanceof CuentaCorporativa) {
+			
+			Inversion inversion = c.crearInversionLiquidez(monto, plazoDias);
+			return inversion.getId();	}
+		
+		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
+
 	}
+
+	private Cuenta buscarCuenta(String cvu) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {

@@ -3,8 +3,8 @@ package clases;
 public class CuentaCorporativa extends Cuenta{
 	
 	private String cuitEmpresa;
-	public CuentaCorporativa(String alias, double saldo, String cuentaEmpresa) {
-		super(alias, saldo);
+	public CuentaCorporativa(String alias, double saldo) {
+		super(alias, null, saldo);
 		
 		this.cuitEmpresa = cuitEmpresa;
 		

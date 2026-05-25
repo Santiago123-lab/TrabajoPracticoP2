@@ -12,7 +12,17 @@ public class Divisa extends Inversion {
 
     @Override
     public double calcularGanancia(){
-        return monto * interes; 
+       
+    	double cotizacion = Utilitarios.consultarCotizacion(divisa);
+    	
+    	double montoEnDivisa = this.monto / cotizacion;
+    	
+    	double gananciaDivisa = montoEnDivisa * interes * (this.plazo / 365);
+    	
+    	double gananciaPesos = gananciaDivisa * cotizacion;
+    	
+    	return gananciaPesos;
+    	
     }
 
     @Override

@@ -1,16 +1,16 @@
 package clases;
 
 public class RentaFija extends Inversion{ 
-    private double interes; 
+    
 
-    public RentaFija(int id, int plazo, double monto, double interes){
+    public RentaFija(int id, int plazo, double monto){
         super(id, plazo, monto); 
-        this.interes = interes; 
+        
     }
 
     @Override
     public double calcularGanancia(){
-        return monto * interes; 
+        return monto * 0.06 * (plazo/365); 
     }
 
     @Override 
