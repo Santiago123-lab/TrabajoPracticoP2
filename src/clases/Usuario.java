@@ -91,7 +91,10 @@ public class Usuario {
 		this.permisoEmpresarial=true;
 	}
 	
-
+	public Cuenta buscarCuenta(String cvu) {
+		
+		return cuentas.get(cvu);
+	}
 	
 
 }

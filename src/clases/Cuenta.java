@@ -41,6 +41,8 @@ public abstract class Cuenta {
        public void debitar(double monto) {
            this.saldo -= monto;
        }
+       
+       public 
       
        public void acreditar(double monto) {
            this.saldo += monto;

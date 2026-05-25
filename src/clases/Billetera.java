@@ -300,8 +300,15 @@ public class Billetera implements IBilletera {
 	}
 
 	private Cuenta buscarCuenta(String cvu) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		for(Usuario usuario : usuarios.values()) {
+			Cuenta cuenta = usuario.buscarCuenta(cvu);
+			if (cuenta!=null) {
+				return cuenta;
+			}
+		}
+		
+		throw new RuntimeException("Cuenta con CVU" + cvu + "no encontrada");
 	}
 
 
