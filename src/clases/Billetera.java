@@ -11,14 +11,21 @@ public class Billetera implements IBilletera {
 	private HashMap<String, Usuario> usuarios;
 	private HashMap<String, Empresa> empresas;
 	private HashMap<String, String> aliasCvu;
+<<<<<<< HEAD
 	private List<Actividad> historialGlobal; 
+=======
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	
 	public Billetera() {
 		
         this.usuarios = new HashMap<>();
         this.empresas = new HashMap<>();
         this.aliasCvu= new HashMap<>();
+<<<<<<< HEAD
 		this.historialGlobal = new ArrayList<>(); 
+=======
+		
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	}
 	
 
@@ -344,12 +351,18 @@ public class Billetera implements IBilletera {
 		
 		origen.debitar(monto);
 		destino.acreditar(monto);
+<<<<<<< HEAD
 //		origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
 //		destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
 		Actividad act = crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(), monto, "Aprobado"); 
 		origen.agregarActividad(act); 
 		destino.agregarActividad(act); 
 		historialGlobal.add(act); 
+=======
+		origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
+		destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado"));
+		
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 		
 		
 	}
@@ -472,8 +485,13 @@ public class Billetera implements IBilletera {
 			Inversion inversion = c.crearInversionLiquidez(monto, plazoDias);
 			return inversion.getId();	}
 		
+<<<<<<< HEAD
 //		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
 		throw new IllegalArgumentException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
+=======
+		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
+
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	}
 
 
@@ -485,6 +503,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String consultarCvu(String alias) {
+<<<<<<< HEAD
 //		return null;
 		if(alias == null || alias.isBlank()) {
 			throw new IllegalArgumentException("Alias invalido"); 
@@ -493,16 +512,25 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Alias inexistente"); 
 		}
 		return aliasCvu.get(alias); 
+=======
+		// TODO Auto-generated method stub
+		return null;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	}
 
 	@Override
 	public List<String> consultarHistorialGlobal() {
+<<<<<<< HEAD
 //		return null;
 		List<String> lista = new ArrayList<>(); 
 		for(Actividad act : historialGlobal) {
 			lista.add(act.toString()); 
 		}
 		return lista; 
+=======
+		// TODO Auto-generated method stub
+		return null;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	}
 
 	@Override
@@ -529,6 +557,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialUsuario(String dniUsuario) {
+<<<<<<< HEAD
 //		return null;
 		if(dniUsuario == null || dniUsuario.isBlank()) {
 			throw new IllegalArgumentException("DNI Invalido"); 
@@ -542,6 +571,10 @@ public class Billetera implements IBilletera {
 			historial.add(act.toString()); 
 		}
 		return historial; 
+=======
+		// TODO Auto-generated method stub
+		return null;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	}
 
 	@Override

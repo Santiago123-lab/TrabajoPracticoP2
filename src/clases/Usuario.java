@@ -71,8 +71,11 @@ public class Usuario {
 		
 	}
 		
+<<<<<<< HEAD
 
 	
+=======
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 	public boolean existeCuenta (String cvu) {
 		
 		return this.cuentas.containsKey(cvu);

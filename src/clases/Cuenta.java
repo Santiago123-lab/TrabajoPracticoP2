@@ -70,6 +70,7 @@ public abstract class Cuenta {
 
 	public Inversion crearInversionRentaFija(double monto, int plazo) {
           
+<<<<<<< HEAD
 //		if (!this.puedeDebitar(monto)) {
 //			throw new RuntimeException("Saldo insuficiente");
 //		} 
@@ -101,10 +102,28 @@ public abstract class Cuenta {
 		agregarSaldoInvertido(monto); 
 		
 		return inversion; 
+=======
+		if (!this.puedeDebitar(monto)) {
+			throw new RuntimeException("Saldo insuficiente");
+    }
+        
+    this.debitar(monto);
+        
+    double interes = 0.10;
+        
+    Inversion inversion = new RentaFija(IdInversion++, plazo, monto);
+        
+    this.agregarSaldoInvertido(monto);
+        
+    inversiones.put(IdInversion, inversion);
+        
+    return inversion;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 }
       
 public Inversion crearInversionDivisa(double monto, int plazo, double interes, String divisa) {
           
+<<<<<<< HEAD
 //    if (!this.puedeDebitar(monto)) {
 //        throw new RuntimeException("Saldo insuficiente");
 //    }
@@ -134,10 +153,26 @@ public Inversion crearInversionDivisa(double monto, int plazo, double interes, S
     agregarSaldoInvertido(monto); 
     
     return inversion; 
+=======
+    if (!this.puedeDebitar(monto)) {
+        throw new RuntimeException("Saldo insuficiente");
+    }
+        
+    this.debitar(monto);
+        
+    Inversion inversion = new Divisa(IdInversion++, plazo, monto, interes, divisa);
+        
+    this.agregarSaldoInvertido(monto);
+        
+    inversiones.put(IdInversion, inversion);
+        
+    return inversion;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 }
 
 public Inversion crearInversionLiquidez(double monto, int plazoDias) {
             
+<<<<<<< HEAD
 //    if (!this.puedeDebitar(monto)) {
 //        throw new RuntimeException("Saldo insuficiente");
 //    }
@@ -169,4 +204,19 @@ public Inversion crearInversionLiquidez(double monto, int plazoDias) {
     agregarSaldoInvertido(monto); 
     
     return inversion; 
+=======
+    if (!this.puedeDebitar(monto)) {
+        throw new RuntimeException("Saldo insuficiente");
+    }
+        
+    double interes = 0.15;
+        
+    this.debitar(monto);
+        
+    Inversion inversion = new Liquidez(IdInversion++, plazoDias, monto);
+        
+    inversiones.put(IdInversion, inversion);
+        
+    return inversion;
+>>>>>>> 652244d6399da5c92ec8def31cb63c0b12a5a5ca
 }}
