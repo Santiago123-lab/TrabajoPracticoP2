@@ -25,4 +25,20 @@ public class CuentaCorporativa extends Cuenta{
 		
 		return "Corporativa";
 	}
+	
+	public String toString() {
+		
+		StringBuilder st = new StringBuilder();
+		
+		//[Tipo]: [Alias] ([CVU])
+		
+		st.append("[Corporativa:]: [\n");
+		st.append(this.alias);
+		st.append("] \n");
+		st.append("([\n");
+		st.append(this.cvu);
+		st.append("])\n");
+		
+		return st.toString();
+}
 }

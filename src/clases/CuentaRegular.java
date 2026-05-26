@@ -21,5 +21,24 @@ public class CuentaRegular extends Cuenta {
 		return "Regular";
 	}
 	
+	public String toString() {
+		
+		StringBuilder st = new StringBuilder();
+		
+		//[Tipo]: [Alias] ([CVU])
+		
+		st.append("[Regular:]: [\n");
+		st.append(this.alias);
+		st.append("] \n");
+		st.append("([\n");
+		st.append(this.cvu);
+		st.append("])\n");
+		
+		return st.toString();
+
+		
+		
+	}
+	
 }
 

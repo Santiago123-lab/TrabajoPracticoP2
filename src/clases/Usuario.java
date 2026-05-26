@@ -33,13 +33,13 @@ public class Usuario {
 		
 	}
 	
-	public List <String> consultarCuentas(){
+	public List <Cuenta> consultarCuentas(){
 		
-		List <String> lista = new ArrayList<>();
+		List <Cuenta> lista = new ArrayList<>();
 		
 		for(Cuenta c: this.cuentas.values()) {
 			
-			lista.add(c.consultarCVU());
+			lista.add(c);
 		}
 		
 		return lista;
@@ -88,10 +88,10 @@ public class Usuario {
 		return this.permisoEmpresarial;
 	}
 	
-	public ArrayList <Actividad> consultarActividades() {
+	public List <Actividad> consultarActividades() {
 		
 		
-		ArrayList <Actividad>lista = new ArrayList<>();
+		List <Actividad>lista = new ArrayList<>();
 		
 		for(Cuenta c: this.cuentas.values()) {
 			

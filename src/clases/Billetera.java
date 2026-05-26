@@ -10,7 +10,7 @@ public class Billetera implements IBilletera {
 	private HashMap<String, Usuario> usuarios;
 	private HashMap<String, Empresa> empresas;
 	private HashMap<String, String> aliasCvu;
-	private List<Actividad> historialGlobal; 
+
 	
 	public Billetera() {
 		
@@ -18,7 +18,7 @@ public class Billetera implements IBilletera {
         this.empresas = new HashMap<>();
         this.aliasCvu= new HashMap<>();
 
-		this.historialGlobal = new ArrayList<>(); 
+
 
 	}
 	
@@ -249,7 +249,15 @@ public class Billetera implements IBilletera {
 		
 		Usuario u = this.usuarios.get(dniUsuario);
 		
-		return u.consultarCuentas();
+		List <String> cuentas = new ArrayList<>();
+		
+		for(Cuenta c : u.consultarCuentas()) {
+			
+			cuentas.add(c.toString());
+			
+		}
+		
+		return cuentas;
 	}
 
 	@Override
@@ -349,7 +357,7 @@ public class Billetera implements IBilletera {
 		Actividad act = crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(), monto, "Aprobado"); 
 		origen.agregarActividad(act); 
 		destino.agregarActividad(act); 
-		historialGlobal.add(act); 
+ 
 		
 	}
 
@@ -489,7 +497,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String consultarCvu(String alias) {
-//		return null;
+//		
 		if(alias == null || alias.isBlank()) { 
 			throw new IllegalArgumentException("Alias invalido"); 
 		}
@@ -502,13 +510,27 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialGlobal() {
-
-//		return null;
-		List<String> lista = new ArrayList<>(); 
-		for(Actividad act : historialGlobal) {
-			lista.add(act.toString()); 
+		
+		List <Actividad>listaAct = new ArrayList<>();
+		
+		for(Usuario u: this.usuarios.values()) {
+			
+			listaAct.addAll(u.consultarActividades());
+			
 		}
-		return lista; 
+		
+		List <String> listaStr = new ArrayList<>();
+		
+		for(Actividad act : listaAct) {
+			
+			listaStr.add(act.toString());
+			
+		}
+		
+		return listaStr;
+		
+
+
 	}
 
 	@Override
@@ -535,15 +557,18 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public List<String> consultarHistorialUsuario(String dniUsuario) {
-//		return null;
+
 		if(dniUsuario == null || dniUsuario.isBlank()) {
 			throw new IllegalArgumentException("DNI Invalido"); 
 		}
 		if(!usuarios.containsKey(dniUsuario)) {
 			throw new IllegalArgumentException("Usuario inexistente"); 
 		}
+		
 		Usuario u = usuarios.get(dniUsuario); 
+		
 		List<String> historial = new ArrayList<>(); 
+		
 		for(Actividad act : u.consultarActividades()) {
 			historial.add(act.toString()); 
 		}
@@ -552,14 +577,72 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public double obtenerTotalInvertido(String dniUsuario) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		if(dniUsuario == null || dniUsuario.isBlank()) {
+			throw new IllegalArgumentException("DNI Invalido"); 
+		}
+		if(!usuarios.containsKey(dniUsuario)) {
+			throw new IllegalArgumentException("Usuario inexistente"); 
+		}
+		
+		Usuario u = this.usuarios.get(dniUsuario);
+		
+		
+		return u.consultarSaldoInvertido();
 	}
 
 	@Override
 	public List<String> cuentasConMayorVolumen(int cantidadTop) {
-		// TODO Auto-generated method stub
-		return null;
+
+		if(cantidadTop<1) {
+			throw new IllegalArgumentException ("Ingrese un valor mayor o igual a 1");
+		}
+		
+		if(cantidadTop>cantidadCuentasTotales()) {
+			
+			throw new IllegalArgumentException ("Ingrese un numero menor.");
+		}
+		
+		List <Cuenta> listaCuentas = new ArrayList <>();
+		Cuenta max = null;
+		
+		while (listaCuentas.size()<cantidadTop) {
+			
+			for(Usuario u : this.usuarios.values()) {
+				
+				for(Cuenta c : u.consultarCuentas()) {
+					
+					if(max==null) {
+						
+						if(!listaCuentas.contains(c)) {
+							
+							max=c;
+						}
+					}
+					else {
+						
+						if(!listaCuentas.contains(c) && max.consultarActividades().size() < c.consultarActividades().size()) {
+							
+							max = c;
+						}
+						
+					}
+				}
+			}
+			
+			listaCuentas.add(max);
+			max=null;
+					
+		}
+		
+		List <String> listaTop = new ArrayList<>();
+		
+		for(Cuenta c: listaCuentas) {
+			
+			listaTop.add(c.toString());
+		}
+		
+		return listaTop;
 	}
 	
 	private Cuenta buscarCuenta(String cvu) {
@@ -592,6 +675,18 @@ public class Billetera implements IBilletera {
 		Actividad act = new Act_Inversion (dniUsuario,cvu,tipoInversion,plazo, monto, estado);
 		
 		return act;
+	}
+	
+	private int cantidadCuentasTotales() {
+
+	    int total = 0;
+
+	    for(Usuario u : this.usuarios.values()) {
+
+	        total += u.consultarCuentas().size();
+	    }
+
+	    return total;
 	}
 	
 	

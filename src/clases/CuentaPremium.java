@@ -28,4 +28,20 @@ public class CuentaPremium extends Cuenta {
 		
 		return "Premium";
 	}
+	
+	public String toString() {
+		
+		StringBuilder st = new StringBuilder();
+		
+		//[Tipo]: [Alias] ([CVU])
+		
+		st.append("[Premium:]: [\n");
+		st.append(this.alias);
+		st.append("] \n");
+		st.append("([\n");
+		st.append(this.cvu);
+		st.append("])\n");
+		
+		return st.toString();
+}
 }

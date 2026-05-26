@@ -22,47 +22,49 @@ public abstract class Cuenta {
 	    this.actividades = new ArrayList<>();
 	    this.inversiones = new HashMap<>(); 	}
 	
-       public double consultarSaldo() {
+    public double consultarSaldo() {
            return saldo;
        }
        
-       public String consultarCVU() {
+    public String consultarCVU() {
     	   return this.cvu;
     	   
        }
       
-       public double consultarSaldoInvertido() {
+    public double consultarSaldoInvertido() {
            return saldoInvertido;
        }
       
-       public String consultarAlias() {
+    public String consultarAlias() {
            return alias;
        }
        
-       public void agregarActividad (Actividad act) {
+    public void agregarActividad (Actividad act) {
     	   
     	   this.actividades.add(act);
        }
       
-       public List<Actividad> consultarActividades() {
+    public List<Actividad> consultarActividades() {
            return actividades;
        }
       
-       public void debitar(double monto) {
+    public void debitar(double monto) {
            this.saldo -= monto;
        }
        
   
-       public void acreditar(double monto) {
+    public void acreditar(double monto) {
            this.saldo += monto;
        }
       
-       public void agregarSaldoInvertido(double monto) {
+    public void agregarSaldoInvertido(double monto) {
            this.saldoInvertido += monto;
        }
       
-       public abstract boolean puedeDebitar(double monto);
-       public abstract boolean puedeAcreditar(double monto);
+    public abstract boolean puedeDebitar(double monto);
+    public abstract boolean puedeAcreditar(double monto);
+    
+    public abstract String toString();
      
 	     
 	      
@@ -82,6 +84,8 @@ public abstract class Cuenta {
 		if (!this.puedeDebitar(monto)) {
 			throw new IllegalArgumentException("Saldo insuficiente");
     } 
+		
+		
 		
         
 //    this.debitar(monto);
