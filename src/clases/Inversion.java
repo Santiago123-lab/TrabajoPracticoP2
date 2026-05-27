@@ -23,6 +23,15 @@ public abstract class Inversion {
     public int getId() {
     	return id;
     }
+    
+    public double getMonto() {
+    	return monto; 
+    }
+    
+    public int getPlazo() {
+    	return plazo; 
+    }
+    
     public abstract double calcularGanancia(); 
 
     public abstract boolean esPrecancelable(); 

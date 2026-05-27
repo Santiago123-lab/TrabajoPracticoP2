@@ -112,6 +112,18 @@ public abstract class Cuenta {
 		return inversion; 
          
 }
+	
+	public Inversion obtenerInversion(int id) {
+		return inversiones.get(id); 
+	}
+	
+	public void eliminarInversiones(int id) {
+		inversiones.remove(id); 
+	}
+	
+	public void descontarSaldoInvertido(double monto) {
+		saldoInvertido -= monto; 
+	}
       
 public Inversion crearInversionDivisa(double monto, int plazo, double interes, String divisa) {
           

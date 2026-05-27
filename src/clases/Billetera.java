@@ -348,7 +348,8 @@ public class Billetera implements IBilletera {
 			
 			origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
 			destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
-			throw new IllegalArgumentException ("La cuenta destino no puede acreditar el saldo deseado");
+//			throw new IllegalArgumentException ("La cuenta destino no puede acreditar el saldo deseado");
+			throw new IllegalStateException("La cuenta destino superaria el limite permitido"); 
 		}
 		
 		origen.debitar(monto);
@@ -491,7 +492,35 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {
-		// TODO Auto-generated method stub
+		if(dni == null || dni.isBlank()) {
+			throw new IllegalArgumentException("Por favor, ingrese un DNI valido"); 
+		}
+		if(!usuarios.containsKey(dni)) {
+			throw new IllegalArgumentException("Usuario inexistente"); 
+		}
+		if(cvu == null || cvu.isBlank()) {
+			throw new IllegalArgumentException("Por favor, ingrese un cvu valido"); 
+		}
+		
+		Cuenta cuenta = buscarCuenta(cvu); 
+		
+		Inversion inversion = cuenta.obtenerInversion(idInversion); 
+		
+		if(inversion == null) {
+			throw new IllegalArgumentException("Inversion inexistente"); 
+		}
+		
+		if(!inversion.esPrecancelable()) {
+			throw new IllegalArgumentException("La inversion no es precancelable"); 
+		}
+		
+		double monto = inversion.getMonto(); 
+		
+		cuenta.acreditar(monto); 
+		
+		cuenta.descontarSaldoInvertido(monto); 
+		
+		cuenta.eliminarInversiones(idInversion); 
 		
 	}
 
