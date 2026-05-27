@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Usuario {
 	
-	//String dni, String nombre, String telefono, String email
+
 	private String dni;
 	private String nombre;
 	private String telefono;

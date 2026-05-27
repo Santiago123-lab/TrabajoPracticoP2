@@ -10,6 +10,7 @@ public class Divisa extends Inversion {
         this.divisa = divisa; 
     }
 
+    
     @Override
     public double calcularGanancia(){
        
@@ -35,8 +36,5 @@ public class Divisa extends Inversion {
         return monto > 5000; 
     }
 
-    public void precancelar(){
-        System.out.println("Inversion precancelada"); 
-    }
     
 }
