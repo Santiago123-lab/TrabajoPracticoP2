@@ -498,7 +498,7 @@ public class Billetera implements IBilletera {
 //		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
 
 
-	}
+	} 
 
 
 	@Override
