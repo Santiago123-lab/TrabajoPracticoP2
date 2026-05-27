@@ -394,8 +394,9 @@ public class Billetera implements IBilletera {
 		
 		Inversion inversion = c.crearInversionRentaFija(monto, plazoDias);
 		
-		Actividad actividad = new Act_Inversion(dni, cvu, "RentaFija", plazoDias, monto, "Aprobado");
-	    c.agregarActividad(actividad);
+		Actividad actividad = crearActividad(dni, cvu, "RentaFija", plazoDias, monto, "Aprobado");
+		
+		c.agregarActividad(actividad);
 		
 		return inversion.getId();
 			
@@ -444,7 +445,7 @@ public class Billetera implements IBilletera {
 		
 		Inversion inversion = c.crearInversionDivisa(monto, plazoDias, tasa, divisa);
 		
-		Actividad actividad = new Act_Inversion(dni, cvu, "Divisa", plazoDias, monto, "Aprobado");
+		Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Aprobado");
 	    c.agregarActividad(actividad);
 		
 		return inversion.getId();
@@ -485,7 +486,7 @@ public class Billetera implements IBilletera {
 			
 			Inversion inversion = c.crearInversionLiquidez(monto, plazoDias);
 			
-			Actividad actividad = new Act_Inversion(dni, cvu, "Liquidez", plazoDias, monto, "Aprobado");
+			Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Aprobado");
 		    c.agregarActividad(actividad);
 		        
 			return inversion.getId();	}
