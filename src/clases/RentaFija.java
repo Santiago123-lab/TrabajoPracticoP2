@@ -15,7 +15,7 @@ public class RentaFija extends Inversion{
 
     @Override 
     public boolean esPrecancelable(){
-        return false; 
+        return true; 
     }
 
     @Override

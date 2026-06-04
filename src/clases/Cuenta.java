@@ -72,9 +72,7 @@ public abstract class Cuenta {
 
 	public Inversion crearInversionRentaFija(double monto, int plazo) {
           
-//		if (!this.puedeDebitar(monto)) {
-//			throw new RuntimeException("Saldo insuficiente");
-//		} 
+		
 		if(monto <= 0) {
 			throw new IllegalArgumentException("Monto invalido"); 
 		}
@@ -85,20 +83,6 @@ public abstract class Cuenta {
 			throw new IllegalArgumentException("Saldo insuficiente");
     } 
 		
-		
-		
-        
-//    this.debitar(monto);
-//        
-//    double interes = 0.10;
-//        
-//    Inversion inversion = new RentaFija(IdInversion++, plazo, monto);
-//        
-//    this.agregarSaldoInvertido(monto);
-//        
-//    inversiones.put(IdInversion, inversion);
-//        
-//    return inversion;
 		debitar(monto); 
 		
 		int id = IdInversion++; 
@@ -128,9 +112,7 @@ public abstract class Cuenta {
 public Inversion crearInversionDivisa(double monto, int plazo, double interes, String divisa) {
           
 
-//    if (!this.puedeDebitar(monto)) {
-//        throw new RuntimeException("Saldo insuficiente");
-//    }
+
     if(monto <= 0) {
     	throw new IllegalArgumentException("Monto invalido"); 
     }
@@ -147,15 +129,6 @@ public Inversion crearInversionDivisa(double monto, int plazo, double interes, S
         throw new IllegalArgumentException("Saldo insuficiente"); 
     }
         
-//    this.debitar(monto);
-//        
-//    Inversion inversion = new Divisa(IdInversion++, plazo, monto, interes, divisa);
-//        
-//    this.agregarSaldoInvertido(monto);
-//        
-//    inversiones.put(IdInversion, inversion);
-//        
-//    return inversion;
     
     debitar(monto); 
     
@@ -174,9 +147,8 @@ public Inversion crearInversionDivisa(double monto, int plazo, double interes, S
 public Inversion crearInversionLiquidez(double monto, int plazoDias) {
             
 
-//    if (!this.puedeDebitar(monto)) {
-//        throw new RuntimeException("Saldo insuficiente");
-//    }
+
+
     if(monto < 20000000) {
     	throw new IllegalArgumentException("El monto minimo para el fondo de liquidez es 20 millones"); 
     }
@@ -189,15 +161,6 @@ public Inversion crearInversionLiquidez(double monto, int plazoDias) {
         throw new IllegalArgumentException("Saldo insuficiente"); 
     }
         
-//    double interes = 0.15;
-//        
-//    this.debitar(monto);
-//        
-//    Inversion inversion = new Liquidez(IdInversion++, plazoDias, monto);
-//        
-//    inversiones.put(IdInversion, inversion);
-//        
-//    return inversion;
     debitar(monto); 
     
     int id = IdInversion++; 

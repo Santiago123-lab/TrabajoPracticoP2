@@ -14,7 +14,7 @@ public class Liquidez extends Inversion {
 
     @Override
     public boolean esPrecancelable(){
-        return true; 
+        return false; 
     }
 
     @Override
