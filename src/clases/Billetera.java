@@ -516,7 +516,7 @@ public class Billetera implements IBilletera {
 		
 		double monto = inversion.getMonto(); 
 		
-		cuenta.acreditar(monto); 
+		cuenta.acreditar(monto);   
 		
 		cuenta.descontarSaldoInvertido(monto); 
 		

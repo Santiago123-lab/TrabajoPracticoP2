@@ -17,7 +17,9 @@ public class Divisa extends Inversion {
     	
     	double montoEnDivisa = this.monto / cotizacion;
     	
-    	double gananciaDivisa = montoEnDivisa * interes * (this.plazo / 365);
+  	    double gananciaDivisa = montoEnDivisa * interes * (this.plazo / 365);
+ 
+
     	
     	double gananciaPesos = gananciaDivisa * cotizacion;
     	

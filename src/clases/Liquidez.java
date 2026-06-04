@@ -9,6 +9,7 @@ public class Liquidez extends Inversion {
     @Override
     public double calcularGanancia(){
         return monto * 0.08 * (plazo/365); 
+
     }
 
     @Override
