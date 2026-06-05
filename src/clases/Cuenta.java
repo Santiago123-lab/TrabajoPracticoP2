@@ -72,17 +72,7 @@ public abstract class Cuenta {
 
 	public Inversion crearInversionRentaFija(double monto, int plazo) {
           
-		
-		if(monto <= 0) {
-			throw new IllegalArgumentException("Monto invalido"); 
-		}
-		if(plazo <= 0) {
-			throw new IllegalArgumentException("Plazo invalido"); 
-		}
-		if (!this.puedeDebitar(monto)) {
-			throw new IllegalArgumentException("Saldo insuficiente");
-    } 
-		
+
 		debitar(monto); 
 		
 		int id = IdInversion++; 

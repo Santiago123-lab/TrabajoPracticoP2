@@ -12,7 +12,7 @@ public abstract class Inversion {
         this.id = id; 
         this.plazo = plazo; 
         this.monto = monto; 
-        this.fechaDeConstitucion = LocalDate.now(); 
+        this.fechaDeConstitucion = Utilitarios.hoy(); 
     }
 
 

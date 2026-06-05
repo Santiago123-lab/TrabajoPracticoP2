@@ -392,9 +392,18 @@ public class Billetera implements IBilletera {
 		
 		Cuenta c = buscarCuenta(cvu);
 		
+		if(!c.puedeDebitar(monto)) {
+			
+			Actividad actividad = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Rechazado");
+			c.agregarActividad(actividad);
+			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
+			
+		}
+		
+		
 		Inversion inversion = c.crearInversionRentaFija(monto, plazoDias);
 		
-		Actividad actividad = crearActividad(dni, cvu, "RentaFija", plazoDias, monto, "Aprobado");
+		Actividad actividad = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Aprobado");
 		
 		c.agregarActividad(actividad);
 		
@@ -443,6 +452,14 @@ public class Billetera implements IBilletera {
 		
 		Cuenta c = buscarCuenta(cvu);
 		
+		if(!c.puedeDebitar(monto)) {
+			
+			Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Rechazado");
+			c.agregarActividad(actividad);
+			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
+			
+		}
+		
 		Inversion inversion = c.crearInversionDivisa(monto, plazoDias, tasa, divisa);
 		
 		Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Aprobado");
@@ -481,6 +498,14 @@ public class Billetera implements IBilletera {
 		}
 		
 		Cuenta c = buscarCuenta(cvu);
+		
+		if(!c.puedeDebitar(monto)) {
+			
+			Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Rechazado");
+			c.agregarActividad(actividad);
+			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
+			
+		}
 		
 		if (c instanceof CuentaCorporativa) {
 			

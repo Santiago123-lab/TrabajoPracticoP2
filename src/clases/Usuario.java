@@ -12,7 +12,6 @@ public class Usuario {
 	private String telefono;
 	private String email;
 	private HashMap<String, Cuenta> cuentas;
-	private double saldoTotalInvertido;
 	private boolean permisoEmpresarial;
 	
 	
@@ -23,7 +22,6 @@ public class Usuario {
 		this.telefono=telefono;
 		this.email=email;
 		this.cuentas= new HashMap<>();
-		this.saldoTotalInvertido=0;
 		this.permisoEmpresarial=false;
 	}
 	
@@ -78,9 +76,19 @@ public class Usuario {
 		
 	}
 	
+
+	
 	public double consultarSaldoInvertido() {
 		
-		return this.saldoTotalInvertido;
+		double total=0;
+		
+		for(Cuenta c : this.cuentas.values()) {
+			
+			total+= c.consultarSaldoInvertido();
+			
+		}
+		
+		return total;
 	}
 	
 	public boolean consultarPermisoEmpresarial() {
