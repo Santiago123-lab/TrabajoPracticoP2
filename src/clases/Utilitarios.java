@@ -22,6 +22,7 @@ public class Utilitarios {
      * actual.
      */
     public static LocalDate hoy() {
+    	
         if (sHoy == null) {
             sHoy = LocalDate.now();
         }
@@ -43,7 +44,9 @@ public class Utilitarios {
      * @param fecha fecha a establecer como Hoy
      */
     public static void definirHoy(LocalDate fecha) {
+    	
         sHoy = fecha;
+        
     }
 
     /**

@@ -71,10 +71,16 @@ public abstract class Cuenta {
 	public static int IdInversion = 1;
 
 	public Inversion crearInversionRentaFija(double monto, int plazo) {
-          
-
-		debitar(monto); 
 		
+		if(monto <= 0) {
+		    	throw new IllegalArgumentException("Monto invalido"); }
+		
+		if(plazo <= 0) {
+		    	throw new IllegalArgumentException("Plazo invalido"); }
+        
+		if (!this.puedeInvertir(monto)) {
+		        throw new IllegalArgumentException("Saldo insuficiente"); }
+
 		int id = IdInversion++; 
 		
 		Inversion inversion = new RentaFija(id, plazo, monto); 
@@ -98,10 +104,14 @@ public abstract class Cuenta {
 	public void descontarSaldoInvertido(double monto) {
 		saldoInvertido -= monto; 
 	}
+	
+	public boolean puedeInvertir(double monto) {
+		return saldo >= monto;
+	}
+	
       
 public Inversion crearInversionDivisa(double monto, int plazo, double interes, String divisa) {
           
-
 
     if(monto <= 0) {
     	throw new IllegalArgumentException("Monto invalido"); 
@@ -115,12 +125,10 @@ public Inversion crearInversionDivisa(double monto, int plazo, double interes, S
     if(divisa == null || divisa.isBlank()) {
     	throw new IllegalArgumentException("Divisa invalida"); 
     }
-    if (!this.puedeDebitar(monto)) {
+    if (!this.puedeInvertir(monto)) {
         throw new IllegalArgumentException("Saldo insuficiente"); 
     }
         
-    
-    debitar(monto); 
     
     int id = IdInversion++; 
     
@@ -137,8 +145,6 @@ public Inversion crearInversionDivisa(double monto, int plazo, double interes, S
 public Inversion crearInversionLiquidez(double monto, int plazoDias) {
             
 
-
-
     if(monto < 20000000) {
     	throw new IllegalArgumentException("El monto minimo para el fondo de liquidez es 20 millones"); 
     }
@@ -147,11 +153,9 @@ public Inversion crearInversionLiquidez(double monto, int plazoDias) {
     	throw new IllegalArgumentException("Plazo invalido"); 
     }
     
-    if (!this.puedeDebitar(monto)) {
+    if (!this.puedeInvertir(monto)) {
         throw new IllegalArgumentException("Saldo insuficiente"); 
     }
-        
-    debitar(monto); 
     
     int id = IdInversion++; 
     

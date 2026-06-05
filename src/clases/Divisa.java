@@ -1,5 +1,8 @@
 package clases;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class Divisa extends Inversion { 
     private double interes; 
     private String divisa; 
@@ -19,8 +22,6 @@ public class Divisa extends Inversion {
     	double montoEnDivisa = this.monto / cotizacion;
     	
   	    double gananciaDivisa = montoEnDivisa * interes * (this.plazo / 365);
- 
-
     	
     	double gananciaPesos = gananciaDivisa * cotizacion;
     	
@@ -37,6 +38,30 @@ public class Divisa extends Inversion {
     public boolean verificarMonto(double monto){
         return monto > 5000; 
     }
+
+
+	@Override
+	protected double precancelar() {
+		
+		LocalDate hoy = Utilitarios.hoy();
+		long dias = ChronoUnit.DAYS.between(fechaDeConstitucion, hoy);
+		
+		if (dias <= 0) {
+			return 0;
+		}
+		
+		if (dias >= 0) {
+			dias = plazo;
+		}
+		
+		double cotizacion = Utilitarios.consultarCotizacion(divisa);
+		double montoDivisa = this.monto / cotizacion;
+		double gananciaDivisa = montoDivisa * interes * (dias/365);
+		double ganancia = gananciaDivisa * cotizacion; 
+		
+		return ganancia / 2;
+		
+	}
 
     
 }

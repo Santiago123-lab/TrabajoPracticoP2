@@ -1,5 +1,8 @@
 package clases;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+
 public class RentaFija extends Inversion{ 
     
 
@@ -22,5 +25,23 @@ public class RentaFija extends Inversion{
     public boolean verificarMonto(double monto){
         return monto >= 1000; 
     }
+
+	@Override
+	protected double precancelar() {
+		
+		LocalDate hoy = Utilitarios.hoy();
+		long dias = ChronoUnit.DAYS.between(fechaDeConstitucion, hoy);
+		
+		if (dias <= 0) {
+			return 0;
+		}
+		
+		if(dias >= plazo) {
+			dias = plazo;
+		}
+		
+		double ganancia = this.monto * 0.20 * (dias / 365);
+		return ganancia/2;
+	}
     
 }

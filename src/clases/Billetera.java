@@ -392,7 +392,7 @@ public class Billetera implements IBilletera {
 		
 		Cuenta c = buscarCuenta(cvu);
 		
-		if(!c.puedeDebitar(monto)) {
+		if(!c.puedeInvertir(monto)) {
 			
 			Actividad actividad = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Rechazado");
 			c.agregarActividad(actividad);
@@ -452,7 +452,7 @@ public class Billetera implements IBilletera {
 		
 		Cuenta c = buscarCuenta(cvu);
 		
-		if(!c.puedeDebitar(monto)) {
+		if(!c.puedeInvertir(monto)) {
 			
 			Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Rechazado");
 			c.agregarActividad(actividad);
@@ -499,7 +499,7 @@ public class Billetera implements IBilletera {
 		
 		Cuenta c = buscarCuenta(cvu);
 		
-		if(!c.puedeDebitar(monto)) {
+		if(!c.puedeInvertir(monto)) {
 			
 			Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Rechazado");
 			c.agregarActividad(actividad);
@@ -551,15 +551,10 @@ public class Billetera implements IBilletera {
 		}
 		
 		double monto = inversion.getMonto(); 
+		 
+		double gananciaFinal = inversion.precancelar();
 		
-		cuenta.acreditar(monto);   
-
-		double ganancia = inversion.calcularGanancia();
-		
-		double gananciaFinal = ganancia / 2;
-		
-		cuenta.acreditar(monto + gananciaFinal); 
-
+		cuenta.acreditar(gananciaFinal); 
 		
 		cuenta.descontarSaldoInvertido(monto); 
 		

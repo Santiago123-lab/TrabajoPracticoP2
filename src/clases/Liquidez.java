@@ -21,5 +21,11 @@ public class Liquidez extends Inversion {
     public boolean verificarMonto(double monto){
         return monto > 0; 
     }
+
+	@Override
+	protected double precancelar() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
     
 }

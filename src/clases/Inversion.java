@@ -13,6 +13,7 @@ public abstract class Inversion {
         this.plazo = plazo; 
         this.monto = monto; 
         this.fechaDeConstitucion = Utilitarios.hoy(); 
+    
     }
 
 
@@ -36,6 +37,11 @@ public abstract class Inversion {
 
     public abstract boolean esPrecancelable(); 
 
-    public abstract boolean verificarMonto(double monto); 
+    public abstract boolean verificarMonto(double monto);
+
+
+	protected abstract double precancelar(); 
+    
+    
 
 }

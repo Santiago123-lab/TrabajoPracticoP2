@@ -103,13 +103,15 @@ public class Principal {
         Utilitarios.actualizarCotizacion("FLE", 1.15);
         System.out.println("  Nuevas cotizaciones - USD: 1080.00 | EUR: 1160.50 | FLE: 1.15\n");
 
+        System.out.println("  Fecha simulada actual: " + Utilitarios.hoy());
         // 6. Precancelar inversión
         System.out.println("[6] Probando precancelación...");
         System.out.println("  Cancelando inversión de Carlos (ID: " + idInvCarlos + ")...");
 
         billetera.precancelarInversion("22222222", cvuCarlosPremium, idInvCarlos);
         System.out.println("  -> Inversión cancelada con éxito.");
-
+        System.out.println(
+                "  Saldo Disponible de Carlos: $" + billetera.obtenerSaldoDisponible(cvuCarlosPremium));
         System.out.println(
                 "  Intentando precancelar una inversión con ID inexistente");
         try {
