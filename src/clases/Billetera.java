@@ -556,9 +556,15 @@ public class Billetera implements IBilletera {
 		
 		cuenta.acreditar(gananciaFinal); 
 		
+		System.out.println("saldo despues = " + cuenta.consultarSaldo());
+		
 		cuenta.descontarSaldoInvertido(monto); 
 		
 		cuenta.eliminarInversiones(idInversion); 
+		
+		
+
+		
 		
 	}
 
@@ -707,9 +713,28 @@ public class Billetera implements IBilletera {
 		for(Cuenta c: listaCuentas) {
 			
 			listaTop.add(c.toString());
+			
 		}
 		
 		return listaTop;
+	}
+	
+	public String toString() {
+		
+		StringBuilder st = new StringBuilder();
+		
+		st.append("\n");
+		st.append("- Cantidad de usuarios del sistema: ");
+		st.append(this.usuarios.size());
+		st.append("\n");
+		st.append("- Cantidad de empresas del sistema: ");
+		st.append(this.empresas.size());
+		st.append("\n");
+		st.append("- Cantidad de cuentas del sistema: ");
+		st.append(this.aliasCvu.size());
+		st.append("\n");
+		
+		return st.toString();
 	}
 	
 	private Cuenta buscarCuenta(String cvu) {

@@ -19,14 +19,12 @@ public class Act_Transferencia extends Actividad{
 		
 		StringBuilder st= new StringBuilder();
 		
+		
 		st.append("===============\n");
-		st.append(" Transferencia: \n");
-		st.append("===============\n");
+		st.append("       Transferencia: \n");
+		st.append("      ===============\n");
 
-//		st.append("fecha: ["); 
-//		st.append(this.fecha); 
-//		st.append("]\\n"); 
-		st.append("origen: [");
+		st.append("       Origen: [");
 
 		st.append(this.dniOrigen);
 		st.append("] ([");
@@ -34,20 +32,20 @@ public class Act_Transferencia extends Actividad{
 		st.append("])\n");
 		
 
-		st.append("destino: [");
+		st.append("       Destino: [");
 		st.append(this.dniDestino);
 		st.append("] ([");
 		st.append(this.cvuDestino);
 		st.append("])\n");
-		st.append("monto: [");
+		st.append("       Monto: [");
 		st.append(this.monto);
 		st.append("]\n");
 		
-		st.append("[");
+		st.append("       [");
 		st.append(this.estado);
 		st.append("]\n");
 		
-		st.append("===============\n");
+		st.append("      ===============\n");
 		
 		return st.toString();
 

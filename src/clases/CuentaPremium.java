@@ -35,12 +35,18 @@ public class CuentaPremium extends Cuenta {
 		
 		//[Tipo]: [Alias] ([CVU])
 		
-		st.append("[Premium:]: [\n");
-		st.append(this.alias);
-		st.append("] \n");
-		st.append("([\n");
 		st.append(this.cvu);
-		st.append("])\n");
+		st.append("\n       Alias: ");
+		st.append(this.alias);
+		st.append("\n");
+		st.append("       Tipo: Cuenta Premium\n");
+		
+//		st.append("[Premium:]: [\n");
+//		st.append(this.alias);
+//		st.append("] \n");
+//		st.append("([\n");
+//		st.append(this.cvu);
+//		st.append("])\n");
 		
 		return st.toString();
 }

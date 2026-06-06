@@ -27,12 +27,11 @@ public class CuentaRegular extends Cuenta {
 		
 		//[Tipo]: [Alias] ([CVU])
 		
-		st.append("[Regular:]: [\n");
-		st.append(this.alias);
-		st.append("] \n");
-		st.append("([\n");
 		st.append(this.cvu);
-		st.append("])\n");
+		st.append("\n       Alias: ");
+		st.append(this.alias);
+		st.append("\n");
+		st.append("       Tipo: Cuenta Regular\n");
 		
 		return st.toString();
 

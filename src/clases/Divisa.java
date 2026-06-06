@@ -6,11 +6,13 @@ import java.time.temporal.ChronoUnit;
 public class Divisa extends Inversion { 
     private double interes; 
     private String divisa; 
+    private double cantidadDivisa;
 
     public Divisa(int id, int plazo, double monto, double interes, String divisa){
         super(id, plazo, monto); 
         this.interes = interes; 
         this.divisa = divisa; 
+        this.cantidadDivisa= monto / Utilitarios.consultarCotizacion(divisa);
     }
 
     
@@ -55,12 +57,16 @@ public class Divisa extends Inversion {
 		}
 		
 		double cotizacion = Utilitarios.consultarCotizacion(divisa);
-		double montoDivisa = this.monto / cotizacion;
-		double gananciaDivisa = montoDivisa * interes * (dias/365.0);
-		double ganancia = gananciaDivisa * cotizacion; 
 		
-		return ganancia / 2;
+		double interesesDivisa =cantidadDivisa * interes * (dias / 365.0);
 		
+		interesesDivisa /= 2;
+		
+		System.out.println("cantidadDivisa = " + cantidadDivisa);
+		System.out.println("retorno precancelar = " + ((cantidadDivisa + interesesDivisa) * cotizacion));
+		
+		
+		return (cantidadDivisa + interesesDivisa) * cotizacion;
 	}
 
     

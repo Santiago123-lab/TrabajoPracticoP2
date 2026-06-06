@@ -28,32 +28,33 @@ public class Act_Inversion extends Actividad {
 		
 		StringBuilder st= new StringBuilder();
 		
+		
 		st.append("===============\n");
-		st.append(" Inversion: \n");
-		st.append("===============\n");
-		st.append("Origen: [");
+		st.append("       Inversion: \n");
+		st.append("      ===============\n");
+		st.append("       Origen: [");
 		st.append(this.dniOrigen);
 		st.append("] ([");
 		st.append(this.cvu);
 		st.append("])\n");
 		
-		st.append("Desc: [");
+		st.append("       Desc: [");
 		st.append(this.tipoInversion);
 		st.append("]\n");
 		
-		st.append("Monto: [");
+		st.append("       Monto: [");
 		st.append(this.monto);
 		st.append("]\n");
 		
-		st.append("Plazo: [");
+		st.append("       Plazo: [");
 		st.append(this.plazo);
 		st.append("]\n");
 		
-		st.append("[");
+		st.append("       [");
 		st.append(this.estado);
 		st.append("]\n");
 		
-		st.append("===============\n");
+		st.append("      ===============\n");
 		
 		return st.toString();
 
