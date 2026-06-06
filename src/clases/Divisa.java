@@ -50,13 +50,13 @@ public class Divisa extends Inversion {
 			return 0;
 		}
 		
-		if (dias >= 0) {
+		if (dias >= plazo) {
 			dias = plazo;
 		}
 		
 		double cotizacion = Utilitarios.consultarCotizacion(divisa);
 		double montoDivisa = this.monto / cotizacion;
-		double gananciaDivisa = montoDivisa * interes * (dias/365);
+		double gananciaDivisa = montoDivisa * interes * (dias/365.0);
 		double ganancia = gananciaDivisa * cotizacion; 
 		
 		return ganancia / 2;

@@ -32,6 +32,7 @@ public class RentaFija extends Inversion{
 		LocalDate hoy = Utilitarios.hoy();
 		long dias = ChronoUnit.DAYS.between(fechaDeConstitucion, hoy);
 		
+		
 		if (dias <= 0) {
 			return 0;
 		}
@@ -40,7 +41,7 @@ public class RentaFija extends Inversion{
 			dias = plazo;
 		}
 		
-		double ganancia = this.monto * 0.20 * (dias / 365);
+		double ganancia = this.monto * 0.20 * (dias / 365.0);
 		return ganancia/2;
 	}
     
