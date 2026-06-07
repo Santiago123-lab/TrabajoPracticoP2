@@ -16,13 +16,11 @@ public class CuentaPremium extends Cuenta {
 		
 		return (saldo - monto) >= 500000;
 	}
-	
-	
+		
 	public boolean puedeAcreditar(double monto) {
 		
 		return true;
 	}
-	
 	
 	public String consultarTipoCuenta() {
 		

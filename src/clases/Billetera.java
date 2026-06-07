@@ -525,7 +525,6 @@ public class Billetera implements IBilletera {
 
 	} 
 
-
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {
 		if(dni == null || dni.isBlank()) {
@@ -570,7 +569,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public String consultarCvu(String alias) {
-//		
+		
 		if(alias == null || alias.isBlank()) { 
 			throw new IllegalArgumentException("Alias invalido"); 
 		}
@@ -745,7 +744,7 @@ public class Billetera implements IBilletera {
 		}
 		
 		for(Usuario usuario : usuarios.values()) {
-			Cuenta cuenta = usuario.buscarCuenta(cvu);
+			Cuenta cuenta = usuario.obtenerCuenta(cvu);
 			if (cuenta!=null) {
 				return cuenta;
 			}
@@ -754,7 +753,6 @@ public class Billetera implements IBilletera {
 		throw new IllegalArgumentException("Cuenta con CVU" + cvu + "no encontrada");
 	}
 
-	
 	private Actividad crearActividad(String dniOrigen, String dniDestino, String cvuOrigen, String cvuDestino, double monto, String estado) {
 		
 		Actividad act = new Act_Transferencia (dniOrigen, dniDestino, cvuOrigen, cvuDestino, monto, estado);

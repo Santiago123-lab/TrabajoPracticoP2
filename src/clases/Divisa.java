@@ -41,7 +41,6 @@ public class Divisa extends Inversion {
         return monto > 5000; 
     }
 
-
 	@Override
 	protected double precancelar() {
 		

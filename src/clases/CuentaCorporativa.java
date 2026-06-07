@@ -10,11 +10,11 @@ public class CuentaCorporativa extends Cuenta{
 		this.cuitEmpresa = cuitEmpresa;
 		
 	}
+	
 	public boolean puedeDebitar (double monto) {
 		
 		return (saldo - monto) >= 0;
 	}
-	
 	
 	public boolean puedeAcreditar (double monto) {
 		

@@ -39,7 +39,6 @@ public abstract class Inversion {
 
     public abstract boolean verificarMonto(double monto);
 
-
 	protected abstract double precancelar(); 
     
     

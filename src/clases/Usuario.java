@@ -75,9 +75,7 @@ public class Usuario {
 		
 		
 	}
-	
-
-	
+		
 	public double consultarSaldoInvertido() {
 		
 		double total=0;
@@ -117,10 +115,4 @@ public class Usuario {
 		this.permisoEmpresarial=true;
 	}
 	
-	public Cuenta buscarCuenta(String cvu) {
-		
-		return cuentas.get(cvu);
-	}
-	
-
 }
