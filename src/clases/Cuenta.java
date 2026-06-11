@@ -15,6 +15,12 @@ public abstract class Cuenta {
   
    
 	public Cuenta(String alias) {
+		
+		if(alias==null || alias.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese otro alias.");
+		}
+		
 		this.cvu = Utilitarios.generarSiguienteCvu();
 	    this.alias = alias;
 	    this.saldo = 0.0;

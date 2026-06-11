@@ -14,6 +14,26 @@ public class Empresa {
 	
 	public Empresa(String cuit, String nombreFantasia, String telefono, String email,String nombreContacto) {
 		
+		if(cuit==null || cuit.isBlank()) {
+			throw new IllegalArgumentException ("Ingrese un CUIT correcto.");
+		}
+		
+		if(nombreFantasia==null || nombreFantasia.isBlank()) {
+			throw new IllegalArgumentException ("Por favor, ingrese el nombre de la empresa.");
+		}
+		
+		if(telefono==null || telefono.isBlank()) {
+			throw new IllegalArgumentException ("Por favor, ingrese un telefono de contacto.");
+		}
+		
+		if(email==null || email.isBlank()) {
+			throw new IllegalArgumentException ("Por favor, ingrese un email de contacto.");
+		}
+		
+		if(nombreContacto==null || nombreContacto.isBlank()) {
+			throw new IllegalArgumentException ("Por favor, ingrese un nombre de contacto correcto.");
+		}
+		
 		this.cuit = cuit;
 		this.nombre = nombreFantasia;
 		this.telefono = telefono;
@@ -44,7 +64,7 @@ public class Empresa {
 		this.personasAutorizadas.add(dniUsuario);
 	}
 	
-	public boolean consultarAutorizado(String dniUsuario) {
+	public boolean estaAutorizado(String dniUsuario) {
 		
 		if(dniUsuario == null || dniUsuario.isBlank()) {
 			

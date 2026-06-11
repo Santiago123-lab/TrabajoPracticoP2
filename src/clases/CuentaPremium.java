@@ -7,6 +7,11 @@ public class CuentaPremium extends Cuenta {
 	public CuentaPremium(String alias, double depositoInicial) {
 		super(alias);
 		
+		if(depositoInicial<500000) {
+			
+			throw new IllegalArgumentException ("Para abrir una cuenta PREMIUM, el deposito inicial debe ser mayor a $500.000");
+			
+		}
 
 		this.saldo=depositoInicial;
 		

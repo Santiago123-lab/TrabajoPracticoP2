@@ -17,6 +17,23 @@ public class Usuario {
 	
 	public Usuario(String dni, String nombre, String telefono, String email) {
 		
+		if(dni==null || dni.isBlank()) {
+			throw new IllegalArgumentException ("El DNI ingresado no es valido");
+
+		}
+		if(nombre==null || nombre.isBlank()) {
+			throw new IllegalArgumentException ("Por favor, ingrese un nombre valido");
+
+		}
+		if(telefono==null || telefono.isBlank()) {
+			throw new IllegalArgumentException ("El telefono ingresado no es valido");
+
+		}
+		if(email==null || email.isBlank()) {
+			throw new IllegalArgumentException ("El email ingresado no es valido");
+
+		}
+		
 		this.dni=dni;
 		this.nombre=nombre;
 		this.telefono=telefono;
@@ -33,11 +50,24 @@ public class Usuario {
 	
 	public List <Cuenta> consultarCuentas(){
 		
-		List <Cuenta> lista = new ArrayList<>();
+		ArrayList <Cuenta> cuentas = new ArrayList<>();
+
+		for(Cuenta c : this.cuentas.values()) {
+			
+			cuentas.add(c);
+			
+		}
+		
+		return cuentas;
+	}
+	
+	public List <String> obtenerCuentas(){
+		
+		List <String> lista = new ArrayList<>();
 		
 		for(Cuenta c: this.cuentas.values()) {
 			
-			lista.add(c);
+			lista.add(c.toString());
 		}
 		
 		return lista;
@@ -60,6 +90,15 @@ public class Usuario {
 		}
 		
 		this.cuentas.put(cvu, c);
+		
+	}
+	
+	public double obtenerSaldoCuenta(String cvu) {
+		
+		Cuenta c= this.cuentas.get(cvu);
+		
+		return c.consultarSaldo();
+		
 		
 	}
 	
@@ -93,6 +132,60 @@ public class Usuario {
 		
 		return this.permisoEmpresarial;
 	}
+	
+	public boolean puedoDebitar(String cvu, double monto) {
+		
+		Cuenta c= this.cuentas.get(cvu);
+		
+		return c.puedeDebitar(monto);
+		
+		
+	}
+	
+	public boolean puedoAcreditar(String cvu, double monto) {
+		
+		Cuenta c= this.cuentas.get(cvu);
+		
+		return c.puedeAcreditar(monto);
+		
+		
+	}
+	
+	public void hacerTransferencia(String cvuOrigen, String cvuDestino, Usuario usuarioDestino, double monto) {
+		
+		Cuenta origen = this.cuentas.get(cvuOrigen);
+		Cuenta destino = usuarioDestino.obtenerCuenta(cvuDestino);
+		
+		if(!puedoDebitar(cvuOrigen,monto)) {
+			
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado");
+			origen.agregarActividad(act);
+			destino.agregarActividad(act);
+			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
+			
+			
+		}
+		
+		if(!usuarioDestino.puedoAcreditar(cvuDestino, monto)) {
+			
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado");
+			origen.agregarActividad(act);
+			destino.agregarActividad(act);
+			throw new IllegalStateException("La cuenta no puede acreditar el monto ingresado");
+			
+		}
+		
+		
+		origen.debitar(monto);
+		destino.acreditar(monto);
+		
+		Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado");
+		origen.agregarActividad(act);
+		destino.agregarActividad(act);
+		
+	}
+	
+
 	
 	public List <Actividad> consultarActividades() {
 		

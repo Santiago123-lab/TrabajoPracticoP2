@@ -7,6 +7,11 @@ public class CuentaCorporativa extends Cuenta{
 	public CuentaCorporativa(String alias,String cuitEmpresa) {
 		super(alias);
 		
+		if(cuitEmpresa==null || cuitEmpresa.isBlank()) {
+			
+			throw new IllegalArgumentException ("Por favor, ingrese un CUIT correcto.");
+		}
+		
 		this.cuitEmpresa = cuitEmpresa;
 		
 	}
