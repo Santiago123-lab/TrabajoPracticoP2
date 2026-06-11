@@ -142,6 +142,14 @@ public class Usuario {
 		
 	}
 	
+	public void agrearActDeCuenta(String cvu, Actividad act) {
+		
+		Cuenta c = this.cuentas.get(cvu);
+		
+		c.agregarActividad(act);
+		
+	}
+	
 	public boolean puedoAcreditar(String cvu, double monto) {
 		
 		Cuenta c= this.cuentas.get(cvu);
@@ -151,16 +159,24 @@ public class Usuario {
 		
 	}
 	
+	public void acreditarMonto(String cvu, double monto) {
+		
+		Cuenta c = this.cuentas.get(cvu);
+		
+		c.acreditar(monto);
+		
+	}
+	
 	public void hacerTransferencia(String cvuOrigen, String cvuDestino, Usuario usuarioDestino, double monto) {
 		
 		Cuenta origen = this.cuentas.get(cvuOrigen);
-		Cuenta destino = usuarioDestino.obtenerCuenta(cvuDestino);
 		
 		if(!puedoDebitar(cvuOrigen,monto)) {
 			
-			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado");
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
 			origen.agregarActividad(act);
-			destino.agregarActividad(act);
+			usuarioDestino.agrearActDeCuenta(cvuDestino, act);
+
 			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
 			
 			
@@ -168,20 +184,22 @@ public class Usuario {
 		
 		if(!usuarioDestino.puedoAcreditar(cvuDestino, monto)) {
 			
-			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado");
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
 			origen.agregarActividad(act);
-			destino.agregarActividad(act);
+			usuarioDestino.agrearActDeCuenta(cvuDestino, act);
+
 			throw new IllegalStateException("La cuenta no puede acreditar el monto ingresado");
 			
 		}
 		
+
 		
 		origen.debitar(monto);
-		destino.acreditar(monto);
+		usuarioDestino.acreditarMonto(cvuDestino, monto);
 		
-		Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), origen.consultarCVU(), destino.consultarCVU(),monto,"Aprobado");
+		Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Aprobado");
 		origen.agregarActividad(act);
-		destino.agregarActividad(act);
+		usuarioDestino.agrearActDeCuenta(cvuDestino, act);
 		
 	}
 	

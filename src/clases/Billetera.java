@@ -225,8 +225,8 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Por favor, ingrese un monto valido.");
 		}
 		
-		Usuario origen = null;
-		Usuario destino = null;
+		Usuario usuarioOrigen = null;
+		Usuario usuarioDestino = null;
 		
 		//Busco usuario de ORIGEN
 		
@@ -234,12 +234,12 @@ public class Billetera implements IBilletera {
 			
 			if(u.existeCuenta(cvuOrigen)) {
 				
-				origen = u;
+				usuarioOrigen = u;
 				
 			}
 		}
 		
-		if (origen==null) {
+		if (usuarioOrigen==null) {
 			
 			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvuOrigen);
 		}
@@ -250,46 +250,20 @@ public class Billetera implements IBilletera {
 			
 			if(u.existeCuenta(cvuDestino)) {
 				
-				destino= u;
+				usuarioDestino= u;
 				
 			}
 		}
 		
-		if (destino==null) {
+		if (usuarioDestino==null) {
 			
 			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvuDestino);
 		}
 		
-		origen.hacerTransferencia(cvuOrigen, cvuDestino, destino, monto);
+		usuarioOrigen.hacerTransferencia(cvuOrigen, cvuDestino, usuarioDestino, monto);
 		
 	}
 	
-		
-		
-//		if(!origen.puedeDebitar(monto)) {
-//			
-//			origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
-//			destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));  
-//			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
-//		}
-//		
-//		if(!destino.puedeAcreditar(monto)) {
-//			
-//			origen.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
-//			destino.agregarActividad(crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(),monto,"Rechazado"));
-//			throw new IllegalStateException("La cuenta destino superaria el limite permitido"); 
-//		}
-//		
-//		origen.debitar(monto);
-//		destino.acreditar(monto);
-//
-//		Actividad act = crearActividad(dniOrigen, dniDestino, origen.consultarCVU(), destino.consultarCVU(), monto, "Aprobado"); 
-//		origen.agregarActividad(act); 
-//		destino.agregarActividad(act); 
-// 
-//		
-//	}
-
 	@Override
 	public int realizarInversionRentaFija(String dni, String cvu, double monto, int plazoDias) {
 		
