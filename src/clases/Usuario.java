@@ -102,6 +102,11 @@ public class Usuario {
 		
 	}
 	
+	public int realizarInversionRentaFija(String cvu, double monto, int plazo) {
+		Cuenta cuenta = cuentas.get(cvu); 
+		return cuenta.realizarInversionRentaFija(cvu, monto, plazo); 
+	}
+	
 	public Cuenta obtenerCuenta(String cvu) {
 		
 		return this.cuentas.get(cvu);

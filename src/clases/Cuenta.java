@@ -96,6 +96,17 @@ public abstract class Cuenta {
 		return inversion; 
          
 }
+	public int realizarInversionRentaFija(String dni, double monto, int plazo) {
+		if(!puedeInvertir(monto)) {
+			Actividad actividad = new Act_Inversion(dni, this.cvu, "Renta Fija", plazo, monto, "Rechazado"); 
+			agregarActividad(actividad); 
+			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir"); 
+		}
+		Inversion inversion = crearInversionRentaFija(monto, plazo); 
+		Actividad actividad = new Act_Inversion(dni, this.cvu, "Renta Fija", plazo, monto, "Aprobado"); 
+		agregarActividad(actividad); 
+		return inversion.getId(); 
+	}
 	
 	public Inversion obtenerInversion(int id) {
 		return inversiones.get(id); 

@@ -292,25 +292,9 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Por favor, ingrese un plazo valido");
 		}
 		
-		Cuenta c = buscarCuenta(cvu);
+		Usuario u = usuarios.get(dni); 
 		
-		if(!c.puedeInvertir(monto)) {
-			
-			Actividad actividad = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Rechazado");
-			c.agregarActividad(actividad);
-			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
-			
-		}
-		
-		
-		Inversion inversion = c.crearInversionRentaFija(monto, plazoDias);
-		
-		Actividad actividad = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Aprobado");
-		
-		c.agregarActividad(actividad);
-		
-		return inversion.getId();
-			
+		return u.realizarInversionRentaFija(cvu, monto, plazoDias); 		
 
 	}
 
