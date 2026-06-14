@@ -230,5 +230,13 @@ public class Usuario {
 		
 		this.permisoEmpresarial=true;
 	}
+
+	public void agregarInversion(String cvu, Inversion i, int id, double monto) {
+		
+		Cuenta c = cuentas.get(cvu);
+		c.agregarInversion(id, i, monto);
+		
+		
+	}
 	
 }

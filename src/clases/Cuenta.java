@@ -182,5 +182,19 @@ public abstract class Cuenta {
 	    return inversion; 
 	
 	}
+
+	public void agregarInversion(int id, Inversion i, double monto) {
+		
+		inversiones.put(id, i);
+		this.saldoInvertido += monto;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 }

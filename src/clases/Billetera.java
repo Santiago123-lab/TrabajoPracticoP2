@@ -10,6 +10,7 @@ public class Billetera implements IBilletera {
 	private HashMap<String, Usuario> usuarios;
 	private HashMap<String, Empresa> empresas;
 	private HashMap<String, String> aliasCvu;
+	private static int idInversion;
 
 	
 	public Billetera() {
@@ -17,6 +18,7 @@ public class Billetera implements IBilletera {
         this.usuarios = new HashMap<>();
         this.empresas = new HashMap<>();
         this.aliasCvu= new HashMap<>();
+        this.idInversion = 1;
 
 
 
@@ -293,9 +295,22 @@ public class Billetera implements IBilletera {
 		}
 		
 		Usuario u = usuarios.get(dni); 
+		Cuenta c = buscarCuenta(cvu);
 		
-		return u.realizarInversionRentaFija(cvu, monto, plazoDias); 		
-
+		if (!c.puedeInvertir(monto)) {
+			Actividad a = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Rechazado");
+			c.agregarActividad(a);
+			throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir en Renta Fija");
+		}
+		
+		int id = idInversion++;
+		Inversion i = new RentaFija(id, plazoDias, monto);
+		u.agregarInversion(cvu, i, id, monto);
+		
+		Actividad a = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Aprobado");
+		c.agregarActividad(a);
+		
+		return id;	
 	}
 
 	@Override
@@ -337,24 +352,25 @@ public class Billetera implements IBilletera {
 		}
 		
 		Cuenta c = buscarCuenta(cvu);
+		Usuario u = usuarios.get(dni);
 		
 		if(!c.puedeInvertir(monto)) {
 			
 			Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Rechazado");
 			c.agregarActividad(actividad);
-			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
-			
+			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");	
 		}
 		
-		Inversion inversion = c.crearInversionDivisa(monto, plazoDias, tasa, divisa);
-		
+		int id = idInversion++;
+		Inversion inversion = new Divisa(id, plazoDias, monto, tasa, divisa);
+		u.agregarInversion(cvu, inversion, id, monto);
 		Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Aprobado");
-	    c.agregarActividad(actividad);
+		c.agregarActividad(actividad);
 		
-		return inversion.getId();
-
+		return id;
 	}
 
+	
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
 		
@@ -384,6 +400,8 @@ public class Billetera implements IBilletera {
 		}
 		
 		Cuenta c = buscarCuenta(cvu);
+		Usuario usuario = usuarios.get(dni);
+		
 		
 		if(!c.puedeInvertir(monto)) {
 			
@@ -395,18 +413,19 @@ public class Billetera implements IBilletera {
 		
 		if (c instanceof CuentaCorporativa) {
 			
-			Inversion inversion = c.crearInversionLiquidez(monto, plazoDias);
-			
-			Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Aprobado");
-		    c.agregarActividad(actividad);
-		        
-			return inversion.getId();	}
-		
+			 int id = idInversion++;
+			 Inversion inversion = new Liquidez(id, plazoDias, monto);
+			 usuario.agregarInversion(cvu, inversion, id, monto);   
+			 Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Aprobado");
+			 c.agregarActividad(actividad);
+			    
+			 return id;
+			 
+		}
 
-//		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
 		throw new IllegalArgumentException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
 
-//		throw new RuntimeException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
+
 
 
 	} 
