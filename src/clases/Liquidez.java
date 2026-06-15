@@ -21,6 +21,13 @@ public class Liquidez extends Inversion {
     public boolean verificarMonto(double monto){
         return monto > 0; 
     }
+    
+    @Override
+    public boolean corroborarCuenta (Cuenta cuenta) {
+    	
+    	return cuenta instanceof CuentaCorporativa;
+    	
+    }
 
 	@Override
 	protected double precancelar() {

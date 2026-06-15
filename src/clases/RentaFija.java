@@ -45,6 +45,13 @@ public class RentaFija extends Inversion{
 		return ganancia/2;
 	}
 	
+    @Override
+    public boolean corroborarCuenta (Cuenta cuenta) {
+    	
+    	return true;
+    	
+    }
+	
 	public String consultarTipo() {
 		
 		return "Renta fija";

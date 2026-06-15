@@ -68,6 +68,13 @@ public class Divisa extends Inversion {
 		return (cantidadDivisa + interesesDivisa) * cotizacion;
 	}
 	
+    @Override
+    public boolean corroborarCuenta (Cuenta cuenta) {
+    	
+    	return true;
+    	
+    }
+	
 	public String consultarTipo() {
 		
 		return "Divisa";

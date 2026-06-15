@@ -238,51 +238,7 @@ public class Usuario {
 		
 		Cuenta c = cuentas.get(cvu);
 		
-		if(i instanceof Liquidez) {
-			
-			if(!(c instanceof CuentaCorporativa)) {
-				
-				Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
-				c.agregarActividad(act);
-				throw new IllegalArgumentException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
-				
-			}
-			else {
-				
-				if(!c.puedeInvertir(i.consultarMonto())) {
-					
-					Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
-					c.agregarActividad(act);
-					
-					throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir");
-					
-					
-				}
-				
-				Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Aprobado");
-				c.agregarActividad(act);
-				c.agregarInversion(i);
-				
-			}
-			
-			return;
-			
-			
-		}
-		
-		if(!c.puedeInvertir(i.consultarMonto())) {
-			
-			Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
-			c.agregarActividad(act);
-			
-			throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir");
-			
-			
-		}
-		
-		Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Aprobado");
-		c.agregarActividad(act);
-		c.agregarInversion(i);
+		c.agregarInversion(i, this.dni);
 		
 		
 	}

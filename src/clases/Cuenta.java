@@ -72,8 +72,6 @@ public abstract class Cuenta {
     
     public abstract String toString();	     
 	      
-	public static int IdInversion = 1;
-
 	public Inversion obtenerInversion(int id) {
 		return inversiones.get(id); 
 	}
@@ -90,10 +88,39 @@ public abstract class Cuenta {
 		return saldo >= monto;
 	}
 	 
-	public void agregarInversion(Inversion i) {
+	public void agregarInversion(Inversion i, String dni) {
+		
+		if(!i.corroborarCuenta(this)) {
+			
+			Actividad act = new Act_Inversion(dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
+			this.actividades.add(act);
+			
+			throw new IllegalArgumentException ("No se puede realizar este tipo de inversion desde una cuenta NO corporativa");
+					
+		}
+		
+		if(!puedeInvertir(i.consultarMonto())) {
+			
+			Actividad act = new Act_Inversion(dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
+			this.actividades.add(act);
+			
+			throw new IllegalArgumentException ("La cuenta no posee saldo suficiente para invertir");
+					
+		}
+		
+		Actividad act = new Act_Inversion(dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Aprobado");
+		this.actividades.add(act);
 		
 		inversiones.put(i.consultarId(), i);
 		this.saldoInvertido += i.consultarMonto();
+		
+		
+		
+		}
+		
+		
+		
+
 	}
 	
 	
@@ -104,4 +131,3 @@ public abstract class Cuenta {
 	
 	
 	
-}

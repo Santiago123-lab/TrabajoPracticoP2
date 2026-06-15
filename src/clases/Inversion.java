@@ -39,6 +39,8 @@ public abstract class Inversion {
 
     public abstract boolean verificarMonto(double monto);
     
+    public abstract boolean corroborarCuenta (Cuenta cuenta);
+    
     public abstract String consultarTipo();
 
 	protected abstract double precancelar(); 
