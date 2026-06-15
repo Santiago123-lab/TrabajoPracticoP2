@@ -67,6 +67,12 @@ public class Divisa extends Inversion {
 		
 		return (cantidadDivisa + interesesDivisa) * cotizacion;
 	}
+	
+	public String consultarTipo() {
+		
+		return "Divisa";
+		
+	}
 
     
 }

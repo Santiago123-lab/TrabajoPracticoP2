@@ -279,10 +279,6 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
 		}
 		
-		if(cvu==null||cvu.isBlank()) {
-			
-			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
-		}
 		
 		if(monto<0) {
 			
@@ -295,22 +291,12 @@ public class Billetera implements IBilletera {
 		}
 		
 		Usuario u = usuarios.get(dni); 
-		Cuenta c = buscarCuenta(cvu);
-		
-		if (!c.puedeInvertir(monto)) {
-			Actividad a = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Rechazado");
-			c.agregarActividad(a);
-			throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir en Renta Fija");
-		}
 		
 		int id = idInversion++;
 		Inversion i = new RentaFija(id, plazoDias, monto);
-		u.agregarInversion(cvu, i, id, monto);
-		
-		Actividad a = crearActividad(dni, cvu, "Renta Fija", plazoDias, monto, "Aprobado");
-		c.agregarActividad(a);
-		
-		return id;	
+		u.agregarInversion(cvu, i);
+
+		return i.consultarId();	
 	}
 
 	@Override
@@ -324,11 +310,6 @@ public class Billetera implements IBilletera {
 		if(!this.usuarios.containsKey(dni)) {
 			
 			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
-		}
-		
-		if(cvu==null||cvu.isBlank()) {
-			
-			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
 		}
 		
 		if(monto<0) {
@@ -351,25 +332,14 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Por favor, ingrese una divisa valida");
 		}
 		
-		Cuenta c = buscarCuenta(cvu);
-		Usuario u = usuarios.get(dni);
-		
-		if(!c.puedeInvertir(monto)) {
-			
-			Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Rechazado");
-			c.agregarActividad(actividad);
-			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");	
-		}
+		Usuario u = usuarios.get(dni); 
 		
 		int id = idInversion++;
-		Inversion inversion = new Divisa(id, plazoDias, monto, tasa, divisa);
-		u.agregarInversion(cvu, inversion, id, monto);
-		Actividad actividad = crearActividad(dni, cvu, "Divisa", plazoDias, monto, "Aprobado");
-		c.agregarActividad(actividad);
-		
-		return id;
-	}
+		Inversion i = new Divisa(id, plazoDias, monto, tasa, divisa);
+		u.agregarInversion(cvu, i);
 
+		return i.consultarId();	
+	}
 	
 	@Override
 	public int realizarInversionLiquidez(String dni, String cvu, double monto, int plazoDias) {
@@ -384,10 +354,6 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("El DNI ingresado no esta registado en el sistema");
 		}
 		
-		if(cvu==null||cvu.isBlank()) {
-			
-			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
-		}
 		
 		if(monto<0) {
 			
@@ -399,36 +365,14 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Por favor, ingrese un plazo valido");
 		}
 		
-		Cuenta c = buscarCuenta(cvu);
-		Usuario usuario = usuarios.get(dni);
+		Usuario u = usuarios.get(dni); 
 		
-		
-		if(!c.puedeInvertir(monto)) {
-			
-			Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Rechazado");
-			c.agregarActividad(actividad);
-			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir.");
-			
-		}
-		
-		if (c instanceof CuentaCorporativa) {
-			
-			 int id = idInversion++;
-			 Inversion inversion = new Liquidez(id, plazoDias, monto);
-			 usuario.agregarInversion(cvu, inversion, id, monto);   
-			 Actividad actividad = crearActividad(dni, cvu, "Liquidez", plazoDias, monto, "Aprobado");
-			 c.agregarActividad(actividad);
-			    
-			 return id;
-			 
-		}
+		int id = idInversion++;
+		Inversion i = new Liquidez(id, plazoDias, monto);
+		u.agregarInversion(cvu, i);
 
-		throw new IllegalArgumentException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
-
-
-
-
-	} 
+		return i.consultarId();	
+	}
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {
@@ -454,7 +398,7 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("La inversion no es precancelable"); 
 		}
 		
-		double monto = inversion.getMonto(); 
+		double monto = inversion.consultarMonto(); 
 		 
 		double gananciaFinal = inversion.precancelar();
 		
@@ -658,20 +602,6 @@ public class Billetera implements IBilletera {
 		throw new IllegalArgumentException("Cuenta con CVU" + cvu + "no encontrada");
 	}
 
-	private Actividad crearActividad(String dniOrigen, String dniDestino, String cvuOrigen, String cvuDestino, double monto, String estado) {
-		
-		Actividad act = new Act_Transferencia (dniOrigen, dniDestino, cvuOrigen, cvuDestino, monto, estado);
-		
-		return act;
-	}
-	
-	private Actividad crearActividad(String dniUsuario, String cvu, String tipoInversion, int plazo, double monto, String estado) {
-		
-		Actividad act = new Act_Inversion (dniUsuario,cvu,tipoInversion,plazo, monto, estado);
-		
-		return act;
-	}
-	
 	private int cantidadCuentasTotales() {
 
 	    int total = 0;

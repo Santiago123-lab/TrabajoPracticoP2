@@ -74,40 +74,6 @@ public abstract class Cuenta {
 	      
 	public static int IdInversion = 1;
 
-	public Inversion crearInversionRentaFija(double monto, int plazo) {
-		
-		if(monto <= 0) {
-		    	throw new IllegalArgumentException("Monto invalido"); }
-		
-		if(plazo <= 0) {
-		    	throw new IllegalArgumentException("Plazo invalido"); }
-        
-		if (!this.puedeInvertir(monto)) {
-		        throw new IllegalArgumentException("Saldo insuficiente"); }
-
-		int id = IdInversion++; 
-		
-		Inversion inversion = new RentaFija(id, plazo, monto); 
-		
-		inversiones.put(id, inversion); 
-		
-		agregarSaldoInvertido(monto); 
-		
-		return inversion; 
-         
-}
-	public int realizarInversionRentaFija(String dni, double monto, int plazo) {
-		if(!puedeInvertir(monto)) {
-			Actividad actividad = new Act_Inversion(dni, this.cvu, "Renta Fija", plazo, monto, "Rechazado"); 
-			agregarActividad(actividad); 
-			throw new IllegalArgumentException("La cuenta ingresada no posee saldo suficiente para invertir"); 
-		}
-		Inversion inversion = crearInversionRentaFija(monto, plazo); 
-		Actividad actividad = new Act_Inversion(dni, this.cvu, "Renta Fija", plazo, monto, "Aprobado"); 
-		agregarActividad(actividad); 
-		return inversion.getId(); 
-	}
-	
 	public Inversion obtenerInversion(int id) {
 		return inversiones.get(id); 
 	}
@@ -124,69 +90,10 @@ public abstract class Cuenta {
 		return saldo >= monto;
 	}
 	 
-	public Inversion crearInversionDivisa(double monto, int plazo, double interes, String divisa) {
-	          
-	
-	    if(monto <= 0) {
-	    	throw new IllegalArgumentException("Monto invalido"); 
-	    }
-	    if(plazo <= 0) {
-	    	throw new IllegalArgumentException("Plazo invalido"); 
-	    }
-	    if(interes < 0) {
-	    	throw new IllegalArgumentException("Interes invalido"); 
-	    }
-	    if(divisa == null || divisa.isBlank()) {
-	    	throw new IllegalArgumentException("Divisa invalida"); 
-	    }
-	    if (!this.puedeInvertir(monto)) {
-	        throw new IllegalArgumentException("Saldo insuficiente"); 
-	    }
-	        
-	    
-	    int id = IdInversion++; 
-	    
-	    Inversion inversion = new Divisa(id, plazo, monto, interes, divisa); 
-	    
-	    inversiones.put(id, inversion); 
-	    
-	    agregarSaldoInvertido(monto); 
-	    
-	    return inversion; 
-	
-	}
-
-	public Inversion crearInversionLiquidez(double monto, int plazoDias) {
-	            
-	
-	    if(monto < 20000000) {
-	    	throw new IllegalArgumentException("El monto minimo para el fondo de liquidez es 20 millones"); 
-	    }
-	    
-	    if(plazoDias <= 0) {
-	    	throw new IllegalArgumentException("Plazo invalido"); 
-	    }
-	    
-	    if (!this.puedeInvertir(monto)) {
-	        throw new IllegalArgumentException("Saldo insuficiente"); 
-	    }
-	    
-	    int id = IdInversion++; 
-	    
-	    Inversion inversion = new Liquidez(id, plazoDias, monto); 
-	    
-	    inversiones.put(id, inversion); 
-	    
-	    agregarSaldoInvertido(monto); 
-	    
-	    return inversion; 
-	
-	}
-
-	public void agregarInversion(int id, Inversion i, double monto) {
+	public void agregarInversion(Inversion i) {
 		
-		inversiones.put(id, i);
-		this.saldoInvertido += monto;
+		inversiones.put(i.consultarId(), i);
+		this.saldoInvertido += i.consultarMonto();
 	}
 	
 	

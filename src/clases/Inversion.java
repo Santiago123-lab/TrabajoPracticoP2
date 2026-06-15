@@ -18,19 +18,19 @@ public abstract class Inversion {
 
 
     public LocalDate getFechaDeConstitucion(){
-        return fechaDeConstitucion; 
+        return this.fechaDeConstitucion; 
    }
     
-    public int getId() {
-    	return id;
+    public int consultarId() {
+    	return this.id;
     }
     
-    public double getMonto() {
-    	return monto; 
+    public double consultarMonto() {
+    	return this.monto; 
     }
     
-    public int getPlazo() {
-    	return plazo; 
+    public int consultarPlazo() {
+    	return this.plazo; 
     }
     
     public abstract double calcularGanancia(); 
@@ -38,8 +38,11 @@ public abstract class Inversion {
     public abstract boolean esPrecancelable(); 
 
     public abstract boolean verificarMonto(double monto);
+    
+    public abstract String consultarTipo();
 
 	protected abstract double precancelar(); 
+	
     
     
 

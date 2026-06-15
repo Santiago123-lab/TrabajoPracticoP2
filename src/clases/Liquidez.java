@@ -27,5 +27,11 @@ public class Liquidez extends Inversion {
 		// TODO Auto-generated method stub
 		return 0;
 	}
+	
+	public String consultarTipo() {
+		
+		return "Liquidez";
+		
+	}
     
 }

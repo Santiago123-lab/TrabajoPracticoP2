@@ -102,11 +102,6 @@ public class Usuario {
 		
 	}
 	
-	public int realizarInversionRentaFija(String cvu, double monto, int plazo) {
-		Cuenta cuenta = cuentas.get(cvu); 
-		return cuenta.realizarInversionRentaFija(cvu, monto, plazo); 
-	}
-	
 	public Cuenta obtenerCuenta(String cvu) {
 		
 		return this.cuentas.get(cvu);
@@ -208,8 +203,6 @@ public class Usuario {
 		
 	}
 	
-
-	
 	public List <Actividad> consultarActividades() {
 		
 		
@@ -231,10 +224,65 @@ public class Usuario {
 		this.permisoEmpresarial=true;
 	}
 
-	public void agregarInversion(String cvu, Inversion i, int id, double monto) {
+	public void agregarInversion(String cvu, Inversion i) {
+		
+		if(cvu==null||cvu.isBlank()) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese un CVU valido");
+		}
+		
+		if(!this.cuentas.containsKey(cvu)){
+			
+			throw new IllegalArgumentException ("Para invertir, ingrese un CVU asociado a un usuario");
+		}
 		
 		Cuenta c = cuentas.get(cvu);
-		c.agregarInversion(id, i, monto);
+		
+		if(i instanceof Liquidez) {
+			
+			if(!(c instanceof CuentaCorporativa)) {
+				
+				Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
+				c.agregarActividad(act);
+				throw new IllegalArgumentException("La inversión en liquidez empresarial solo se puede realizar desde una cuenta corporativa");
+				
+			}
+			else {
+				
+				if(!c.puedeInvertir(i.consultarMonto())) {
+					
+					Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
+					c.agregarActividad(act);
+					
+					throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir");
+					
+					
+				}
+				
+				Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Aprobado");
+				c.agregarActividad(act);
+				c.agregarInversion(i);
+				
+			}
+			
+			return;
+			
+			
+		}
+		
+		if(!c.puedeInvertir(i.consultarMonto())) {
+			
+			Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Rechazado");
+			c.agregarActividad(act);
+			
+			throw new IllegalArgumentException("La cuenta no posee saldo suficiente para invertir");
+			
+			
+		}
+		
+		Actividad act = new Act_Inversion(this.dni, cvu, i.consultarTipo(), i.consultarPlazo(), i.consultarMonto(), "Aprobado");
+		c.agregarActividad(act);
+		c.agregarInversion(i);
 		
 		
 	}
