@@ -32,7 +32,6 @@ public class RentaFija extends Inversion{
 		LocalDate hoy = Utilitarios.hoy();
 		long dias = ChronoUnit.DAYS.between(fechaDeConstitucion, hoy);
 		
-		
 		if (dias <= 0) {
 			return 0;
 		}

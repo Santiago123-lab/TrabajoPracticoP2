@@ -50,9 +50,24 @@ public abstract class Cuenta {
     	   this.actividades.add(act);
        }
       
-    public List<Actividad> consultarActividades() {
-           return actividades;
+    public List<String> obtenerHistorial() {
+    	
+    		List <String> lista = new ArrayList<>();
+    		
+    		for(Actividad act : this.actividades) {
+    			
+    			lista.add(act.toString());
+    			
+    		}
+    	
+           return lista;
        }
+    
+    public int consultarVolumen() {
+
+        return actividades.size();
+
+    }
       
     public void debitar(double monto) {
            this.saldo -= monto;
@@ -114,9 +129,35 @@ public abstract class Cuenta {
 		inversiones.put(i.consultarId(), i);
 		this.saldoInvertido += i.consultarMonto();
 		
-		
-		
 		}
+	
+	public void precancelarInversion(int idInversion) {
+		
+		if(!this.inversiones.containsKey(idInversion)) {
+			
+			throw new IllegalArgumentException ("La cuenta no posee una inversion bajo el ID ingresado.");
+			
+		}
+		
+		Inversion inv = this.inversiones.get(idInversion);
+		
+		if(!inv.esPrecancelable()) {
+			
+			throw new IllegalArgumentException ("La inversion ingresada no se puede precancelar");
+		}
+		
+		double monto = inv.consultarMonto(); 
+		 
+		double gananciaFinal = inv.precancelar();
+		
+		acreditar(gananciaFinal); 
+		
+		descontarSaldoInvertido(monto); 
+		
+		eliminarInversiones(idInversion); 
+		
+		
+	}
 		
 		
 		

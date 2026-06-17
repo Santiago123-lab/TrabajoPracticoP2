@@ -376,6 +376,7 @@ public class Billetera implements IBilletera {
 
 	@Override
 	public void precancelarInversion(String dni, String cvu, int idInversion) {
+		
 		if(dni == null || dni.isBlank()) {
 			throw new IllegalArgumentException("Por favor, ingrese un DNI valido"); 
 		}
@@ -386,33 +387,25 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException("Por favor, ingrese un cvu valido"); 
 		}
 		
-		Cuenta cuenta = buscarCuenta(cvu); 
+		//Busco el usuario con la cuenta correspondiente
 		
-		Inversion inversion = cuenta.obtenerInversion(idInversion); 
+		Usuario usuario = null;
 		
-		if(inversion == null) {
-			throw new IllegalArgumentException("Inversion inexistente"); 
+		for(Usuario u: this.usuarios.values()) {
+			
+			if(u.existeCuenta(cvu)) {
+				
+				usuario = u;
+				
+			}
 		}
 		
-		if(!inversion.esPrecancelable()) {
-			throw new IllegalArgumentException("La inversion no es precancelable"); 
+		if (usuario==null) {
+			
+			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvu);
 		}
 		
-		double monto = inversion.consultarMonto(); 
-		 
-		double gananciaFinal = inversion.precancelar();
-		
-		cuenta.acreditar(gananciaFinal); 
-		
-		System.out.println("saldo despues = " + cuenta.consultarSaldo());
-		
-		cuenta.descontarSaldoInvertido(monto); 
-		
-		cuenta.eliminarInversiones(idInversion); 
-		
-		
-
-		
+		usuario.precancelarInversion(cvu, idInversion);
 		
 	}
 
@@ -432,26 +425,15 @@ public class Billetera implements IBilletera {
 	@Override
 	public List<String> consultarHistorialGlobal() {
 		
-		List <Actividad>listaAct = new ArrayList<>();
+		List <String> listaAct = new ArrayList<>();
 		
 		for(Usuario u: this.usuarios.values()) {
 			
-			listaAct.addAll(u.consultarActividades());
+			listaAct.addAll(u.obtenerHistorialTotal());
 			
 		}
-		
-		List <String> listaStr = new ArrayList<>();
-		
-		for(Actividad act : listaAct) {
-			
-			listaStr.add(act.toString());
-			
-		}
-		
-		return listaStr;
-		
 
-
+		return listaAct;
 	}
 
 	@Override
@@ -462,18 +444,26 @@ public class Billetera implements IBilletera {
 			
 		}
 		
-		Cuenta c = buscarCuenta(cvu);
+		Usuario usuario = null;
 		
-		List <String> lista = new ArrayList();
+		//Busco usuario 
 		
-		for(Actividad act : c.consultarActividades()) {
+		for(Usuario u: this.usuarios.values()) {
 			
-			lista.add(act.toString());
-					
+			if(u.existeCuenta(cvu)) {
+				
+				usuario = u;
+				
+			}
 		}
 		
+		if (usuario==null) {
+			
+			throw new IllegalArgumentException ("No existe una cuenta asociada al CVU: "+cvu);
+		}
 		
-		return lista;
+		return usuario.obtenerHistorial(cvu);
+
 	}
 
 	@Override
@@ -488,12 +478,7 @@ public class Billetera implements IBilletera {
 		
 		Usuario u = usuarios.get(dniUsuario); 
 		
-		List<String> historial = new ArrayList<>(); 
-		
-		for(Actividad act : u.consultarActividades()) {
-			historial.add(act.toString()); 
-		}
-		return historial;
+		return u.obtenerHistorialTotal();
 	}
 
 	@Override
@@ -542,7 +527,7 @@ public class Billetera implements IBilletera {
 					}
 					else {
 						
-						if(!listaCuentas.contains(c) && max.consultarActividades().size() < c.consultarActividades().size()) {
+						if(!listaCuentas.contains(c) && max.obtenerHistorial().size() < c.obtenerHistorial().size()) {
 							
 							max = c;
 						}
@@ -584,23 +569,6 @@ public class Billetera implements IBilletera {
 		
 		return st.toString();
 	}
-	
-	private Cuenta buscarCuenta(String cvu) {
-		
-		if(cvu==null || cvu.isBlank()) {
-			
-			throw new IllegalArgumentException("Por favor, ingrese un cvu valido");
-		}
-		
-		for(Usuario usuario : usuarios.values()) {
-			Cuenta cuenta = usuario.obtenerCuenta(cvu);
-			if (cuenta!=null) {
-				return cuenta;
-			}
-		}
-		
-		throw new IllegalArgumentException("Cuenta con CVU" + cvu + "no encontrada");
-	}
 
 	private int cantidadCuentasTotales() {
 
@@ -608,7 +576,7 @@ public class Billetera implements IBilletera {
 
 	    for(Usuario u : this.usuarios.values()) {
 
-	        total += u.consultarCuentas().size();
+	        total += u.cantidadCuentas();
 	    }
 
 	    return total;

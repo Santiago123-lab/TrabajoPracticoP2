@@ -48,6 +48,12 @@ public class Usuario {
 		
 	}
 	
+	public int cantidadCuentas() {
+
+	    return cuentas.size();
+
+	}
+	
 	public List <Cuenta> consultarCuentas(){
 		
 		ArrayList <Cuenta> cuentas = new ArrayList<>();
@@ -203,18 +209,27 @@ public class Usuario {
 		
 	}
 	
-	public List <Actividad> consultarActividades() {
+	public List <String> obtenerHistorialTotal() {
 		
 		
-		List <Actividad>lista = new ArrayList<>();
+		List <String> lista = new ArrayList<>();
 		
 		for(Cuenta c: this.cuentas.values()) {
 			
-			lista.addAll(c.consultarActividades());
+			lista.addAll(c.obtenerHistorial());
 			
 		}
 		
 		return lista;
+		
+		
+	}
+	
+	public List <String> obtenerHistorial(String cvu){
+		
+		Cuenta c = this.cuentas.get(cvu);
+		
+		return c.obtenerHistorial();
 		
 		
 	}
@@ -240,6 +255,19 @@ public class Usuario {
 		
 		c.agregarInversion(i, this.dni);
 		
+		
+	}
+	
+	public void precancelarInversion(String cvu, int idInversion) {
+		
+		if(idInversion < 0) {
+			
+			throw new IllegalArgumentException("Por favor, ingrese correctamente el ID de la inversion."); 
+		}
+		
+		Cuenta c = this.cuentas.get(cvu);
+		
+		c.precancelarInversion(idInversion);
 		
 	}
 	

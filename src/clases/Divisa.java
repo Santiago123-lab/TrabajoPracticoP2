@@ -61,10 +61,6 @@ public class Divisa extends Inversion {
 		
 		interesesDivisa /= 2;
 		
-		System.out.println("cantidadDivisa = " + cantidadDivisa);
-		System.out.println("retorno precancelar = " + ((cantidadDivisa + interesesDivisa) * cotizacion));
-		
-		
 		return (cantidadDivisa + interesesDivisa) * cotizacion;
 	}
 	

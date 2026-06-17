@@ -31,7 +31,7 @@ public class Liquidez extends Inversion {
 
 	@Override
 	protected double precancelar() {
-		// TODO Auto-generated method stub
+
 		return 0;
 	}
 	
