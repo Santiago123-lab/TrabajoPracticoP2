@@ -2,6 +2,7 @@
 package clases;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -509,47 +510,25 @@ public class Billetera implements IBilletera {
 			throw new IllegalArgumentException ("Ingrese un numero menor.");
 		}
 		
-		List <Cuenta> listaCuentas = new ArrayList <>();
-		Cuenta max = null;
-		
-		while (listaCuentas.size()<cantidadTop) {
-			
-			for(Usuario u : this.usuarios.values()) {
-				
-				for(Cuenta c : u.consultarCuentas()) {
-					
-					if(max==null) {
-						
-						if(!listaCuentas.contains(c)) {
-							
-							max=c;
-						}
-					}
-					else {
-						
-						if(!listaCuentas.contains(c) && max.obtenerHistorial().size() < c.obtenerHistorial().size()) {
-							
-							max = c;
-						}
-						
-					}
-				}
-			}
-			
-			listaCuentas.add(max);
-			max=null;
-					
+		List<CuentaConVolumen> lista = new ArrayList<>();
+
+		for(Usuario u : usuarios.values()) {
+
+		    lista.addAll(u.obtenerInfoCuentas());
+
 		}
 		
-		List <String> listaTop = new ArrayList<>();
+		Collections.sort(lista);
 		
-		for(Cuenta c: listaCuentas) {
-			
-			listaTop.add(c.toString());
-			
+		List<String> listaFinal = new ArrayList<>();
+
+		for(int i = lista.size() - 1;i >= lista.size() - cantidadTop; i--) {
+
+			listaFinal.add(lista.get(i).consultarCuenta());
 		}
 		
-		return listaTop;
+		return listaFinal;
+
 	}
 	
 	public String toString() {

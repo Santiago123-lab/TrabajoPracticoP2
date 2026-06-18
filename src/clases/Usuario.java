@@ -54,17 +54,21 @@ public class Usuario {
 
 	}
 	
-	public List <Cuenta> consultarCuentas(){
-		
-		ArrayList <Cuenta> cuentas = new ArrayList<>();
+	public List<CuentaConVolumen> obtenerInfoCuentas() {
 
-		for(Cuenta c : this.cuentas.values()) {
-			
-			cuentas.add(c);
-			
-		}
-		
-		return cuentas;
+	    List<CuentaConVolumen> lista = new ArrayList<>();
+
+	    for(Cuenta c : cuentas.values()) {
+
+	        lista.add(
+	            new CuentaConVolumen(
+	                c.toString(),
+	                c.consultarVolumen()
+	            )
+	        );
+	    }
+
+	    return lista;
 	}
 	
 	public List <String> obtenerCuentas(){
