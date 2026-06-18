@@ -3,7 +3,7 @@ package clases;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-//import clases.Cuenta;
+
 	
 public abstract class Cuenta {
 	protected String cvu;
@@ -31,36 +31,18 @@ public abstract class Cuenta {
     public double consultarSaldo() {
            return saldo;
        }
-       
+     
+    public double consultarSaldoInvertido() {
+        return saldoInvertido;
+    }
+    
     public String consultarCVU() {
     	   return this.cvu;
     	   
        }
       
-    public double consultarSaldoInvertido() {
-           return saldoInvertido;
-       }
-      
     public String consultarAlias() {
            return alias;
-       }
-       
-    public void agregarActividad (Actividad act) {
-    	   
-    	   this.actividades.add(act);
-       }
-      
-    public List<String> obtenerHistorial() {
-    	
-    		List <String> lista = new ArrayList<>();
-    		
-    		for(Actividad act : this.actividades) {
-    			
-    			lista.add(act.toString());
-    			
-    		}
-    	
-           return lista;
        }
     
     public int consultarVolumen() {
@@ -68,39 +50,26 @@ public abstract class Cuenta {
         return actividades.size();
 
     }
-      
+    
+    public void agregarActividad (Actividad act) {
+    	   
+    	   this.actividades.add(act);
+       }
+    
     public void debitar(double monto) {
-           this.saldo -= monto;
-       }
-         
-    public void acreditar(double monto) {
-           this.saldo += monto;
-       }
+        this.saldo -= monto;
+    }
       
+    public void acreditar(double monto) {
+        this.saldo += monto;
+    }
+    
     public void agregarSaldoInvertido(double monto) {
            this.saldoInvertido += monto;
        }
-      
-    public abstract boolean puedeDebitar(double monto);
- 
-    public abstract boolean puedeAcreditar(double monto);
-    
-    public abstract String toString();	     
-	      
-	public Inversion obtenerInversion(int id) {
-		return inversiones.get(id); 
-	}
-	
-	public void eliminarInversiones(int id) {
-		inversiones.remove(id); 
-	}
-	
+ 	      
 	public void descontarSaldoInvertido(double monto) {
 		saldoInvertido -= monto; 
-	}
-	
-	public boolean puedeInvertir(double monto) {
-		return saldo >= monto;
 	}
 	 
 	public void agregarInversion(Inversion i, String dni) {
@@ -154,12 +123,33 @@ public abstract class Cuenta {
 		
 		descontarSaldoInvertido(monto); 
 		
-		eliminarInversiones(idInversion); 
+		this.inversiones.remove(idInversion); 
 		
 		
 	}
+	
+	public boolean puedeInvertir(double monto) {
+		return saldo >= monto;
+	}
+	
+    public List<String> obtenerHistorial() {
+    	
+		List <String> lista = new ArrayList<>();
 		
-		
+		for(Actividad act : this.actividades) {
+			
+			lista.add(act.toString());
+			
+		}
+	
+       return lista;
+   }
+	
+    public abstract boolean puedeDebitar(double monto);
+    
+    public abstract boolean puedeAcreditar(double monto);
+    
+    public abstract String toString();		
 		
 
 	}

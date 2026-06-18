@@ -51,6 +51,7 @@ public class RentaFija extends Inversion{
     	
     }
 	
+    @Override
 	public String consultarTipo() {
 		
 		return "Renta fija";

@@ -48,39 +48,38 @@ public class Usuario {
 		
 	}
 	
+	public double consultarSaldoInvertido() {
+		
+		double total=0;
+		
+		for(Cuenta c : this.cuentas.values()) {
+			
+			total+= c.consultarSaldoInvertido();
+			
+		}
+		
+		return total;
+	}
+	
+	//Metodos referidos a empresa:
+	
+	public void recibirPermisoEmpresarial() {
+		
+		this.permisoEmpresarial=true;
+	}
+
+	//Metodos referidos a cuentas:
+	
 	public int cantidadCuentas() {
 
 	    return cuentas.size();
 
 	}
 	
-	public List<CuentaConVolumen> obtenerInfoCuentas() {
-
-	    List<CuentaConVolumen> lista = new ArrayList<>();
-
-	    for(Cuenta c : cuentas.values()) {
-
-	        lista.add(
-	            new CuentaConVolumen(
-	                c.toString(),
-	                c.consultarVolumen()
-	            )
-	        );
-	    }
-
-	    return lista;
-	}
-	
-	public List <String> obtenerCuentas(){
+	public boolean existeCuenta (String cvu) {
 		
-		List <String> lista = new ArrayList<>();
+		return this.cuentas.containsKey(cvu);
 		
-		for(Cuenta c: this.cuentas.values()) {
-			
-			lista.add(c.toString());
-		}
-		
-		return lista;
 	}
 	
 	public void agregarCuenta(String cvu, Cuenta c) {
@@ -112,51 +111,39 @@ public class Usuario {
 		
 	}
 	
-	public Cuenta obtenerCuenta(String cvu) {
+	public void hacerTransferencia(String cvuOrigen, String cvuDestino, Usuario usuarioDestino, double monto) {
 		
-		return this.cuentas.get(cvu);
+		Cuenta origen = this.cuentas.get(cvuOrigen);
 		
-	}
-		
-	public boolean existeCuenta (String cvu) {
-		
-		return this.cuentas.containsKey(cvu);
-		
-		
-	}
-		
-	public double consultarSaldoInvertido() {
-		
-		double total=0;
-		
-		for(Cuenta c : this.cuentas.values()) {
+		if(!origen.puedeDebitar(monto)) {
 			
-			total+= c.consultarSaldoInvertido();
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
+			origen.agregarActividad(act);
+			usuarioDestino.agregarActDeCuenta(cvuDestino, act);
+
+			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
+			
 			
 		}
 		
-		return total;
-	}
-	
-	public boolean consultarPermisoEmpresarial() {
+		if(!usuarioDestino.puedoAcreditar(cvuDestino, monto)) {
+			
+			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
+			origen.agregarActividad(act);
+			usuarioDestino.agregarActDeCuenta(cvuDestino, act);
+
+			throw new IllegalStateException("La cuenta no puede acreditar el monto ingresado");
+			
+		}
 		
-		return this.permisoEmpresarial;
-	}
-	
-	public boolean puedoDebitar(String cvu, double monto) {
+
 		
-		Cuenta c= this.cuentas.get(cvu);
+		origen.debitar(monto);
+		usuarioDestino.acreditarMonto(cvuDestino, monto);
 		
-		return c.puedeDebitar(monto);
-		
-		
-	}
-	
-	public void agrearActDeCuenta(String cvu, Actividad act) {
-		
-		Cuenta c = this.cuentas.get(cvu);
-		
-		c.agregarActividad(act);
+		Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Aprobado");
+		origen.agregarActividad(act);
+		usuarioDestino.agregarActDeCuenta(cvuDestino, act);
 		
 	}
 	
@@ -177,40 +164,43 @@ public class Usuario {
 		
 	}
 	
-	public void hacerTransferencia(String cvuOrigen, String cvuDestino, Usuario usuarioDestino, double monto) {
+	public void agregarActDeCuenta(String cvu, Actividad act) {
 		
-		Cuenta origen = this.cuentas.get(cvuOrigen);
+		Cuenta c = this.cuentas.get(cvu);
 		
-		if(!puedoDebitar(cvuOrigen,monto)) {
+		c.agregarActividad(act);
+		
+	}
+	
+	//Metodos referidos a historial/actividad:
+	
+	public List <String> obtenerCuentas(){
+		
+		List <String> lista = new ArrayList<>();
+		
+		for(Cuenta c: this.cuentas.values()) {
 			
-			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
-			origen.agregarActividad(act);
-			usuarioDestino.agrearActDeCuenta(cvuDestino, act);
-
-			throw new IllegalArgumentException ("La cuenta de origen no posee saldo suficiente para debitar");
-			
-			
+			lista.add(c.toString());
 		}
 		
-		if(!usuarioDestino.puedoAcreditar(cvuDestino, monto)) {
-			
-			Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Rechazado");
-			origen.agregarActividad(act);
-			usuarioDestino.agrearActDeCuenta(cvuDestino, act);
+		return lista;
+	}
+	
+	public List<CuentaConVolumen> obtenerInfoCuentas() {
 
-			throw new IllegalStateException("La cuenta no puede acreditar el monto ingresado");
-			
-		}
-		
+	    List<CuentaConVolumen> lista = new ArrayList<>();
 
-		
-		origen.debitar(monto);
-		usuarioDestino.acreditarMonto(cvuDestino, monto);
-		
-		Actividad act= new Act_Transferencia(this.dni, usuarioDestino.consultarDni(), cvuOrigen, cvuDestino,monto,"Aprobado");
-		origen.agregarActividad(act);
-		usuarioDestino.agrearActDeCuenta(cvuDestino, act);
-		
+	    for(Cuenta c : cuentas.values()) {
+
+	        lista.add(
+	            new CuentaConVolumen(
+	                c.toString(),
+	                c.consultarVolumen()
+	            )
+	        );
+	    }
+
+	    return lista;
 	}
 	
 	public List <String> obtenerHistorialTotal() {
@@ -238,11 +228,8 @@ public class Usuario {
 		
 	}
 	
-	public void recibirPermisoEmpresarial() {
-		
-		this.permisoEmpresarial=true;
-	}
-
+	//Metodos referidos a inversion
+	
 	public void agregarInversion(String cvu, Inversion i) {
 		
 		if(cvu==null||cvu.isBlank()) {

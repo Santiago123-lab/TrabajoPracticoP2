@@ -34,23 +34,12 @@ public class CuentaCorporativa extends Cuenta{
 	public String toString() {
 		
 		StringBuilder st = new StringBuilder();
-		
-		//[Tipo]: [Alias] ([CVU])
-		//c.consultarCVU()+"\n       Alias: ["+c.consultarAlias()+"]\n
-		
+	
 		st.append(this.cvu);
 		st.append("\n       Alias: ");
 		st.append(this.alias);
 		st.append("\n");
 		st.append("       Tipo: Cuenta corporativa\n");
-		
-		
-//		st.append("[Corporativa:]: [\n");
-//		st.append(this.alias);
-//		st.append("] \n");
-//		st.append("([\n");
-//		st.append(this.cvu);
-//		st.append("])\n");
 		
 		return st.toString();
 }

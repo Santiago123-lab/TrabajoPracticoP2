@@ -71,6 +71,7 @@ public class Divisa extends Inversion {
     	
     }
 	
+    @Override
 	public String consultarTipo() {
 		
 		return "Divisa";

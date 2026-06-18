@@ -15,12 +15,7 @@ public abstract class Inversion {
         this.fechaDeConstitucion = Utilitarios.hoy(); 
     
     }
-
-
-    public LocalDate getFechaDeConstitucion(){
-        return this.fechaDeConstitucion; 
-   }
-    
+  
     public int consultarId() {
     	return this.id;
     }
@@ -42,8 +37,8 @@ public abstract class Inversion {
     public abstract boolean corroborarCuenta (Cuenta cuenta);
     
     public abstract String consultarTipo();
-
-	protected abstract double precancelar(); 
+            
+    protected abstract double precancelar(); 
 	
     
     
