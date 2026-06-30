@@ -41,7 +41,7 @@ public class RentaFija extends Inversion{
 		}
 		
 		double ganancia = this.monto * 0.20 * (dias / 365.0);
-		return ganancia/2;
+		return this.monto+ganancia/2;
 	}
 	
     @Override

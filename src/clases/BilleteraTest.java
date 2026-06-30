@@ -68,7 +68,7 @@ public class BilleteraTest {
         billetera.realizarInversionRentaFija("11111111", cvuAlice, 500000, 30);
         double invertidoMasDisponible = billetera.obtenerSaldoDisponible(cvuAlice)
                 + billetera.obtenerTotalInvertido("11111111");
-
+        
         assertEquals(500000.0, billetera.obtenerTotalInvertido("11111111"), 0.01);
         assertEquals(1500000.0, billetera.obtenerSaldoDisponible(cvuAlice), 0.01);
         assertEquals(2000000.0, invertidoMasDisponible, 0.01);

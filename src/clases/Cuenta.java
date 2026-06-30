@@ -96,7 +96,9 @@ public abstract class Cuenta {
 		this.actividades.add(act);
 		
 		inversiones.put(i.consultarId(), i);
+		debitar(i.consultarMonto());
 		this.saldoInvertido += i.consultarMonto();
+		
 		
 		}
 	

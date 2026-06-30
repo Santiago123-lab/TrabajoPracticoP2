@@ -192,12 +192,7 @@ public class Usuario {
 
 	    for(Cuenta c : cuentas.values()) {
 
-	        lista.add(
-	            new CuentaConVolumen(
-	                c.toString(),
-	                c.consultarVolumen()
-	            )
-	        );
+	        lista.add(new CuentaConVolumen(c.toString(),c.consultarVolumen()));
 	    }
 
 	    return lista;
